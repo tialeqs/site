@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#0f0f0e">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -36,7 +36,7 @@
   --cream-line:#d6cdb9;
   --cream-ink:#171511;
   --cream-muted:#625a4f;
-  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --mono:'Inter',sans-serif;
   --display:'Jost',sans-serif;
   --tbar:56px;
 }
@@ -55,6 +55,7 @@ img{max-width:100%;display:block;}
 .container{max-width:1120px;margin:0 auto;padding:0 32px;}
 @media(max-width:600px){.container{padding:0 16px;}}
 .mono{font-family:var(--mono);}
+.t-field,.t-cpu,.session,.arr-ruler,.pad .note,.knob .num{font-variant-numeric:tabular-nums;}
 .hl{color:var(--orange);}
 
 /* ───────── TRANSPORT BAR ───────── */
@@ -212,12 +213,6 @@ section{position:relative;}
 .hero-glow{position:absolute;width:720px;height:720px;right:-200px;top:-260px;background:radial-gradient(circle,rgba(238,93,19,.16),transparent 60%);pointer-events:none;}
 .hero-wrap{position:relative;display:grid;grid-template-columns:.92fr 1.08fr;gap:56px;align-items:center;}
 @media(max-width:1000px){.hero-wrap{grid-template-columns:1fr;gap:48px;}}
-.hero-tag{
-  display:inline-flex;align-items:center;gap:10px;margin-bottom:28px;
-  font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
-  padding:6px 12px 6px 8px;border:1px solid var(--line2);border-radius:100px;
-}
-.hero-tag i{width:8px;height:8px;border-radius:50%;background:var(--play);box-shadow:0 0 10px var(--play);animation:blink 2s infinite;}
 @keyframes blink{50%{opacity:.35;}}
 .hero h1{
   font-family:var(--display);font-size:clamp(48px,5.7vw,86px);font-weight:600;
@@ -229,7 +224,7 @@ section{position:relative;}
 .hero-by{display:flex;align-items:center;gap:10px;margin-top:28px;font-size:13px;color:var(--muted);}
 .hero-by b{color:var(--ink);font-weight:600;}
 .hero-by .sig{font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;padding-left:10px;border-left:1px solid var(--line2);}
-@media(max-width:600px){.hero-tag{font-size:9.5px;letter-spacing:.05em;}.hero{padding:44px 0 64px;}.hero-cta .btn{width:100%;}.hero-sub{font-size:15.5px;}}
+@media(max-width:600px){.hero{padding:44px 0 64px;}.hero-cta .btn{width:100%;}.hero-sub{font-size:15.5px;}}
 
 /* SESSION VIEW TOY */
 .session{
@@ -335,7 +330,7 @@ section{position:relative;}
 .xf-panel{border:1px solid var(--line2);border-radius:12px;background:var(--panel);overflow:hidden;}
 .xf-cols{display:grid;grid-template-columns:1fr 1fr;}
 @media(max-width:720px){.xf-cols{grid-template-columns:1fr;}}
-.xf-col{padding:34px 34px 30px;transition:opacity .25s,filter .25s;}
+.xf-col{padding:34px 34px 30px;}
 .xf-col.a{border-right:1px solid var(--line);}
 @media(max-width:720px){.xf-col.a{border-right:0;border-bottom:1px solid var(--line);}.xf-col{padding:26px 22px;}}
 .xf-label{display:flex;align-items:center;gap:10px;margin-bottom:18px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;}
@@ -351,16 +346,6 @@ section{position:relative;}
 .xf-list li::before{flex:0 0 auto;font-family:var(--mono);font-size:12px;margin-top:2px;}
 .xf-col.a li::before{content:'✕';color:#7b756c;}
 .xf-col.b li::before{content:'✓';color:var(--orange);}
-.xf-bar{display:flex;align-items:center;gap:16px;padding:18px 34px;border-top:1px solid var(--line);background:#141413;}
-@media(max-width:720px){.xf-bar{padding:16px 22px;}}
-.xf-bar .lbl{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--muted);}
-.xf-bar .cap{font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;}
-@media(max-width:520px){.xf-bar .cap{display:none;}}
-.xf{flex:1;-webkit-appearance:none;appearance:none;height:28px;background:transparent;cursor:ew-resize;}
-.xf::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:linear-gradient(90deg,#3a3934,#0b0b0a 50%,var(--orange));}
-.xf::-moz-range-track{height:6px;border-radius:3px;background:linear-gradient(90deg,#3a3934,#0b0b0a 50%,var(--orange));}
-.xf::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:28px;margin-top:-11px;border-radius:4px;background:linear-gradient(#e9e4d8,#b8b2a6);border:1px solid #000;box-shadow:0 3px 10px rgba(0,0,0,.5),inset 0 -2px 0 rgba(0,0,0,.2);}
-.xf::-moz-range-thumb{width:22px;height:28px;border-radius:4px;background:linear-gradient(#e9e4d8,#b8b2a6);border:1px solid #000;}
 
 /* ───────── FOR WHO / ARM ───────── */
 .for-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start;}
@@ -748,7 +733,6 @@ footer .ok i{width:7px;height:7px;border-radius:50%;background:var(--play);}
   <div class="hero-glow" aria-hidden="true"></div>
   <div class="container hero-wrap">
     <div>
-      <span class="hero-tag reveal"><i></i>Ableton Live ao vivo · para tecladistas de igreja</span>
       <h1 class="split">Você sabe<br>tocar. Agora<br>aprenda a <span class="hl">comandar.</span></h1>
       <p class="hero-sub reveal d2"><strong>Ableton Express</strong> é o curso que ensina o tecladista de igreja a montar, do zero, um setup completo de timbres, playback e click, sem depender de template de ninguém.</p>
       <div class="hero-cta reveal d3">
@@ -779,7 +763,7 @@ footer .ok i{width:7px;height:7px;border-radius:50%;background:var(--play);}
     <h2 class="h-big split">O papel do tecladista mudou.<br><span class="hl">E ninguém te ensinou</span><br>a parte de trás do palco.</h2>
     <p class="problem-intro reveal">Hoje você não toca só teclado. Você dispara playback, organiza click, troca timbre no meio da música e ainda precisa resolver quando algo trava. E quando o Ableton vira um bicho de sete cabeças, a culpa nunca é sua.</p>
 
-    <div class="xf-panel reveal d1" data-info="Crossfader|Arraste de A pra B. É exatamente essa a transição que o curso faz com você.">
+    <div class="xf-panel reveal d1" data-info="Antes e depois|A transição que o curso faz com você.">
       <div class="xf-cols">
         <div class="xf-col a" id="xfA">
           <p class="xf-label"><span class="ab">A</span>Sem dominar o Ableton</p>
@@ -799,12 +783,6 @@ footer .ok i{width:7px;height:7px;border-radius:50%;background:var(--play);}
             <li>Toca com liberdade e a cabeça 100% na ministração</li>
           </ul>
         </div>
-      </div>
-      <div class="xf-bar">
-        <span class="lbl">A</span>
-        <input type="range" class="xf" id="xf" min="0" max="100" value="12" aria-label="Crossfader de A (sem dominar) para B (dominando)">
-        <span class="lbl" style="color:var(--orange)">B</span>
-        <span class="cap">Crossfader</span>
       </div>
     </div>
   </div>
@@ -1526,16 +1504,6 @@ document.addEventListener('keydown',function(e){
 });
 document.addEventListener('keyup',function(e){noteOff(e.key.toLowerCase());});
 window.addEventListener('blur',function(){Object.keys(held).forEach(noteOff);});
-
-/* ─────────── Crossfader ─────────── */
-var xf=$('#xf'),xfA=$('#xfA'),xfB=$('#xfB'),xfTouched=false;
-function applyXf(){var v=xf.value/100;xfA.style.opacity=(1-.55*v).toFixed(2);xfA.style.filter='grayscale('+v+') blur('+(v*.6).toFixed(2)+'px)';xfB.style.opacity=(.45+.55*v).toFixed(2);xfB.style.filter='grayscale('+(1-v)+')';}
-xf.addEventListener('input',function(){xfTouched=true;applyXf();});
-applyXf();
-new IntersectionObserver(function(es,ob){es.forEach(function(e){if(!e.isIntersecting)return;ob.disconnect();
-  if(RM){xf.value=100;applyXf();return;}
-  setTimeout(function(){var st=null,from=+xf.value;function an(ts){if(xfTouched)return;if(!st)st=ts;var p=Math.min(1,(ts-st)/1800),ez=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;xf.value=from+(100-from)*ez;applyXf();if(p<1)requestAnimationFrame(an);}requestAnimationFrame(an);},700);
-});},{threshold:.5}).observe($('.xf-panel'));
 
 /* ─────────── Record arm ─────────── */
 var arms=$$('.arm-row'),armMsg=$('#armMsg'),armRes=$('#armResult'),armCount=$('#armCount');
