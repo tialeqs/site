@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Ableton Express · Stories</title>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#0f0f0e;--panel:#191917;--panel2:#22221f;--panel3:#2b2b27;--line:#2e2d29;--line2:#3b3a35;
+  --ink:#efeae0;--muted:#c9c2b6;--dim:#a59f95;--orange:#EE5D13;--orange2:#ff7c3a;--play:#7ed957;
+  --c-purple:#a98bf0;--c-orange:#f2803f;--c-blue:#6b95f5;--c-yellow:#f2c84b;--c-cyan:#56c6dd;--c-pink:#f07a9f;
+  --cream:#f0ead8;--cream-line:#d6cdb9;--cream-ink:#171511;--cream-muted:#4d463d;
+}
+body{background:#000;font-family:'Inter',sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;display:flex;flex-wrap:wrap;gap:40px;padding:40px;}
+.story{position:relative;width:1080px;height:1920px;overflow:hidden;background:var(--bg);padding:0 84px;}
+.story.light{background:var(--cream);color:var(--cream-ink);}
+.grid-bg{position:absolute;inset:0;pointer-events:none;opacity:.6;
+  background-image:linear-gradient(to right,rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:90px 100%,100% 45px;}
+.glow{position:absolute;width:1300px;height:1300px;border-radius:50%;background:radial-gradient(circle,rgba(238,93,19,.22),transparent 62%);pointer-events:none;}
+.content{position:relative;height:100%;display:flex;flex-direction:column;}
+
+/* topo: barra de transporte (fica abaixo da área do perfil do Instagram) */
+.tbar{margin-top:236px;display:flex;align-items:center;gap:18px;}
+.mark{width:52px;height:52px;border-radius:11px;background:var(--orange);display:grid;place-items:center;flex:0 0 auto;}
+.mark::after{content:'';border-left:19px solid #111;border-top:12px solid transparent;border-bottom:12px solid transparent;margin-left:5px;}
+.brand{font-family:'Jost';font-weight:600;font-size:30px;letter-spacing:.09em;text-transform:uppercase;}
+.light .brand{color:var(--cream-ink);}
+.tfield{margin-left:auto;display:flex;gap:10px;}
+.tfield span{font-size:22px;font-weight:500;padding:9px 16px;border-radius:8px;background:#0b0b0a;border:1px solid var(--line2);color:var(--ink);font-variant-numeric:tabular-nums;}
+.tfield span small{color:var(--dim);font-size:16px;margin-left:6px;}
+.tfield .play{background:var(--play);border-color:var(--play);color:#111;padding:9px 18px;}
+.light .tfield span{background:var(--cream-ink);border-color:var(--cream-ink);color:var(--cream);}
+.light .tfield .play{background:var(--orange);border-color:var(--orange);color:#fff;}
+
+.scene{display:inline-flex;align-items:center;gap:16px;margin-top:78px;font-size:24px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);}
+.scene b{display:inline-flex;align-items:center;gap:10px;background:var(--play);color:#111;padding:7px 14px;border-radius:6px;font-weight:700;letter-spacing:.06em;}
+.scene b::before{content:'';border-left:11px solid currentColor;border-top:7px solid transparent;border-bottom:7px solid transparent;}
+.light .scene{color:var(--cream-muted);}
+.light .scene b{background:var(--cream-ink);color:var(--cream);}
+
+h1,h2{font-family:'Jost';font-weight:600;letter-spacing:-.035em;line-height:1.02;}
+h1{font-size:126px;margin-top:36px;}
+h2{font-size:104px;margin-top:36px;}
+.hl{color:var(--orange);}
+.sub{font-size:36px;line-height:1.5;color:var(--muted);margin-top:36px;}
+.sub strong{color:var(--ink);font-weight:600;}
+.light .sub{color:var(--cream-muted);}
+.light .sub strong{color:var(--cream-ink);}
+
+/* rodapé: acima da área de resposta do Instagram */
+.foot{position:absolute;left:0;right:0;bottom:250px;display:flex;align-items:center;justify-content:space-between;gap:24px;}
+.cta{display:inline-flex;align-items:center;gap:18px;background:var(--orange);color:#fff;font-family:'Jost';font-weight:600;font-size:38px;padding:28px 44px;border-radius:14px;box-shadow:0 20px 60px rgba(238,93,19,.35);}
+.cta .tri{border-left:18px solid #fff;border-top:11px solid transparent;border-bottom:11px solid transparent;}
+.foot-note{font-size:24px;color:var(--dim);line-height:1.45;text-align:right;}
+.light .foot-note{color:var(--cream-muted);}
+.foot-note b{color:var(--ink);font-weight:600;}
+.light .foot-note b{color:var(--cream-ink);}
+
+/* ── Session View ── */
+.session{margin-top:48px;background:#1c1c1a;border:1px solid var(--line2);border-radius:22px;overflow:hidden;box-shadow:0 50px 120px rgba(0,0,0,.6);}
+.s-top{display:flex;align-items:center;gap:14px;padding:16px 22px;background:#151514;border-bottom:1px solid var(--line);font-size:20px;color:var(--dim);}
+.s-top .tab{padding:5px 12px;border-radius:6px;background:var(--panel3);color:var(--ink);}
+.s-top .file{margin-left:auto;}
+.s-grid{display:grid;grid-template-columns:repeat(6,1fr) 112px;gap:6px;padding:14px;}
+.s-head{height:44px;border-radius:6px;background:var(--tc);color:#111;font-weight:700;font-size:20px;display:flex;align-items:center;padding:0 12px;}
+.s-head.m{background:#3a3a36;color:var(--ink);}
+.slot{height:62px;border-radius:6px;background:#262623;display:flex;align-items:center;gap:10px;padding:0 12px;font-size:19px;font-weight:500;color:#111;position:relative;overflow:hidden;}
+.slot.empty::after{content:'';width:13px;height:13px;border:2px solid #444;border-radius:2px;margin:auto;}
+.clip{background:color-mix(in srgb,var(--tc) 72%,#1c1c1a);}
+.clip::before{content:'';flex:0 0 auto;border-left:12px solid rgba(0,0,0,.55);border-top:8px solid transparent;border-bottom:8px solid transparent;}
+.clip.on{background:var(--tc);box-shadow:inset 0 0 0 3px rgba(255,255,255,.7);}
+.clip.on::before{border-left-color:#0d3d00;}
+.clip.on i{position:absolute;left:0;bottom:0;height:6px;width:var(--p);background:rgba(0,0,0,.45);}
+.scn{height:62px;border-radius:6px;background:#2e2e2a;display:flex;align-items:center;gap:10px;padding:0 12px;font-size:19px;color:var(--ink);}
+.scn::before{content:'';border-left:12px solid var(--dim);border-top:8px solid transparent;border-bottom:8px solid transparent;}
+.scn.on::before{border-left-color:var(--play);}
+.meters{display:grid;grid-template-columns:repeat(6,1fr) 112px;gap:6px;padding:0 14px 16px;}
+.meter{height:96px;border-radius:6px;background:#111110;display:flex;justify-content:center;gap:5px;padding:7px;}
+.meter i{width:11px;background:#1a1a18;border-radius:2px;position:relative;overflow:hidden;}
+.meter i::after{content:'';position:absolute;left:0;right:0;bottom:0;height:var(--lv);background:linear-gradient(to top,#5fd35a 0 65%,#f2c84b 82%,#ee5d13);}
+
+/* ── A/B ── */
+.ab{margin-top:56px;border:1px solid var(--line2);border-radius:22px;background:var(--panel);overflow:hidden;}
+.ab-col{padding:36px 40px 30px;}
+.ab-col+.ab-col{border-top:1px solid var(--line);}
+.ab-label{display:flex;align-items:center;gap:16px;font-size:24px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px;}
+.ab-label .k{width:44px;height:44px;border-radius:8px;display:grid;place-items:center;font-size:24px;}
+.a .ab-label{color:var(--muted);} .a .k{background:#3a3934;color:var(--ink);}
+.b .ab-label{color:var(--orange);} .b .k{background:var(--orange);color:#fff;}
+.ab ul{list-style:none;}
+.ab li{display:flex;gap:18px;padding:18px 0;border-top:1px solid var(--line);font-size:31px;line-height:1.4;}
+.a li{color:var(--muted);} .b li{color:var(--ink);font-weight:500;}
+.a li::before{content:'✕';color:var(--dim);font-size:24px;margin-top:4px;}
+.b li::before{content:'✓';color:var(--orange);font-weight:700;margin-top:1px;}
+
+/* ── Arm ── */
+.arm{margin-top:60px;border:1px solid var(--cream-line);border-radius:22px;background:#f6f1e3;overflow:hidden;}
+.arm-head{display:flex;justify-content:space-between;padding:22px 30px;border-bottom:1px solid var(--cream-line);font-size:22px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--cream-muted);}
+.arm li{list-style:none;display:flex;align-items:center;gap:26px;padding:32px 30px;border-bottom:1px solid var(--cream-line);font-size:36px;line-height:1.35;font-weight:500;}
+.arm li.on{background:#fbf3e7;}
+.dot{flex:0 0 auto;width:56px;height:56px;border-radius:50%;border:3px solid #b9ae99;display:grid;place-items:center;}
+.dot::after{content:'';width:22px;height:22px;border-radius:50%;background:#cfc5b1;}
+.on .dot{border-color:var(--orange);background:rgba(238,93,19,.1);}
+.on .dot::after{background:var(--orange);box-shadow:0 0 18px rgba(238,93,19,.8);}
+.arm-res{display:flex;align-items:center;gap:20px;padding:30px;background:var(--cream-ink);color:var(--cream);font-family:'Jost';font-size:34px;font-weight:500;}
+.arm-res i{width:20px;height:20px;border-radius:50%;background:var(--orange);box-shadow:0 0 18px var(--orange);}
+
+/* ── Arrangement ── */
+.ov{margin-top:52px;border:1px solid var(--line2);border-radius:14px;background:var(--panel);padding:14px 16px 16px;}
+.ov-r{display:flex;justify-content:space-between;font-size:17px;color:var(--dim);padding:0 4px 8px;font-variant-numeric:tabular-nums;}
+.ov-s{position:relative;display:grid;grid-template-columns:repeat(6,1fr) .6fr;gap:5px;height:30px;}
+.ov-s i{border-radius:4px;background:var(--tc);}
+.ov-s i.new{background:repeating-linear-gradient(45deg,#2a2a27 0 7px,#1e1e1c 7px 14px);}
+.ov-s .ph{position:absolute;top:-36px;bottom:-6px;left:38%;width:3px;background:var(--ink);}
+.ov-s .ph::before{content:'';position:absolute;top:0;left:-8px;border-top:13px solid var(--ink);border-left:9.5px solid transparent;border-right:9.5px solid transparent;}
+.lanes{margin-top:22px;display:flex;flex-direction:column;gap:12px;}
+.lane{display:flex;border-radius:14px;overflow:hidden;background:color-mix(in srgb,var(--tc) 15%,#1c1c1a);border:1px solid color-mix(in srgb,var(--tc) 45%,transparent);}
+.lane .n{flex:0 0 130px;display:grid;place-items:center;background:var(--panel2);border-right:6px solid var(--tc);font-family:'Jost';font-weight:700;font-size:62px;color:var(--tc);letter-spacing:-.03em;}
+.lane .t{padding:22px 26px;}
+.lane .t h3{font-family:'Jost';font-weight:600;font-size:38px;letter-spacing:-.01em;line-height:1.15;}
+.lane .t p{font-size:23px;color:var(--muted);margin-top:6px;line-height:1.4;}
+.lane .gift{display:inline-block;margin-left:10px;vertical-align:middle;background:var(--tc);color:#111;font-family:'Inter';font-size:17px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:5px;}
+.drop{margin-top:12px;border:3px dashed #4a4942;border-radius:14px;padding:22px 26px;display:flex;align-items:center;gap:22px;font-size:27px;color:var(--muted);}
+.drop b{color:var(--ink);}
+.drop .plus{flex:0 0 auto;width:56px;height:56px;border-radius:10px;border:1px solid var(--line2);display:grid;place-items:center;color:var(--orange);font-size:36px;}
+
+/* ── Drum rack ── */
+.pads{margin-top:56px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:20px;background:#211f1a;border-radius:26px;box-shadow:0 40px 80px rgba(40,30,10,.25);}
+.pad{position:relative;min-height:210px;padding:20px 20px 22px;border-radius:14px;background:linear-gradient(#34322c,#2b2924);color:var(--ink);display:flex;flex-direction:column;justify-content:flex-end;box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 4px 0 #15140f;}
+.pad.lit{background:color-mix(in srgb,var(--tc) 42%,#2b2924);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 0 50px color-mix(in srgb,var(--tc) 55%,transparent);}
+.pad::before{content:'';position:absolute;top:18px;right:18px;width:14px;height:14px;border-radius:50%;background:var(--tc);}
+.pad .nt{position:absolute;top:15px;left:18px;font-size:17px;color:#aaa396;font-weight:500;}
+.pad b{font-family:'Jost';font-size:29px;font-weight:600;line-height:1.15;}
+.pad.go{background:var(--orange);justify-content:space-between;}
+.pad.go::before{display:none;}
+.pad.go .nt{color:rgba(255,255,255,.8);}
+.pad.go .bt{width:0;height:0;border-left:44px solid #fff;border-top:28px solid transparent;border-bottom:28px solid transparent;margin-top:38px;}
+
+/* ── Instrutor ── */
+.quote{font-family:'Jost';font-weight:600;font-size:76px;line-height:1.1;letter-spacing:-.025em;margin-top:44px;}
+.rack{margin-top:56px;border:1px solid var(--line2);border-radius:22px;background:var(--panel2);overflow:hidden;}
+.rack-bar{display:flex;align-items:center;gap:14px;padding:16px 24px;background:#2f2f2b;font-size:21px;}
+.rack-bar .pwr{width:22px;height:22px;border-radius:50%;background:var(--orange);box-shadow:0 0 12px rgba(238,93,19,.7);}
+.rack-bar em{margin-left:auto;font-style:normal;color:var(--dim);}
+.rack-id{padding:28px 30px 8px;}
+.rack-id .nm{font-family:'Jost';font-weight:700;font-size:44px;letter-spacing:.05em;}
+.rack-id p{font-size:26px;color:var(--muted);line-height:1.5;margin-top:6px;}
+.knobs{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:22px 20px 26px;}
+.knob{display:flex;flex-direction:column;align-items:center;text-align:center;padding:18px 8px 20px;border-radius:12px;background:#1b1b19;}
+.knob svg{width:120px;height:120px;}
+.knob .trk{fill:none;stroke:#3a3934;stroke-width:6;stroke-linecap:round;}
+.knob .va{fill:none;stroke:var(--orange);stroke-width:6;stroke-linecap:round;}
+.knob .cap{fill:#2c2c28;stroke:#121211;stroke-width:1.5;}
+.knob .ptr{stroke:var(--ink);stroke-width:3.5;stroke-linecap:round;}
+.knob .v{font-family:'Jost';font-weight:700;font-size:54px;line-height:1;margin-top:8px;}
+.knob .l{font-size:19px;color:var(--muted);margin-top:8px;line-height:1.3;}
+.cred{margin-top:30px;display:flex;flex-direction:column;gap:14px;}
+.cred div{display:flex;gap:18px;align-items:baseline;font-size:29px;color:var(--muted);line-height:1.4;}
+.cred div::before{content:'';flex:0 0 auto;width:16px;height:16px;border-radius:3px;background:var(--orange);transform:translateY(-3px);}
+.cred b{color:var(--ink);font-weight:600;}
+
+/* ── Depoimentos ── */
+.proofs{margin-top:44px;display:flex;flex-direction:column;gap:22px;}
+.proof{border:1px solid var(--line2);border-radius:18px;overflow:hidden;background:var(--panel);box-shadow:0 30px 70px rgba(0,0,0,.5);}
+.proof .bar{display:flex;align-items:center;gap:12px;padding:12px 20px;background:var(--tc);color:#111;font-size:21px;font-weight:700;}
+.proof .bar::before{content:'';border-left:12px solid rgba(0,0,0,.6);border-top:8px solid transparent;border-bottom:8px solid transparent;}
+.proof .bar em{margin-left:auto;font-style:normal;font-weight:500;opacity:.75;}
+.proof .im{padding:12px;background:#171716;display:grid;place-items:center;}
+.proof img{width:100%;border-radius:12px;display:block;}
+.proof.r1{transform:rotate(-1.6deg);} .proof.r2{transform:rotate(1.4deg);margin-left:auto;}
+
+/* ── Oferta ── */
+.dev{margin-top:52px;border:1px solid var(--line2);border-radius:26px;background:var(--panel);overflow:hidden;position:relative;box-shadow:0 50px 120px rgba(0,0,0,.55);}
+.dev::before{content:'';position:absolute;inset:-1px;border-radius:26px;padding:2px;background:linear-gradient(135deg,var(--orange),transparent 40%,transparent 60%,rgba(242,200,75,.6));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;}
+.dev-bar{display:flex;align-items:center;gap:14px;padding:16px 26px;background:#252522;border-bottom:1px solid var(--line);font-size:21px;}
+.dev-bar .pwr{width:22px;height:22px;border-radius:50%;background:var(--orange);box-shadow:0 0 12px rgba(238,93,19,.8);}
+.dev-body{padding:40px 44px 44px;background:linear-gradient(160deg,rgba(238,93,19,.1),transparent 55%);}
+.badge{display:inline-flex;gap:10px;font-size:22px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:linear-gradient(90deg,#F0A500,#e8861a);color:#1a0f00;padding:10px 22px;border-radius:100px;}
+.from{font-family:'Jost';font-size:32px;font-weight:600;color:#e06a5e;text-decoration:line-through;margin-top:30px;}
+.inst{font-family:'Jost';font-weight:700;font-size:120px;letter-spacing:-.04em;line-height:1;margin-top:12px;}
+.inst span{font-size:56px;font-weight:500;color:var(--muted);letter-spacing:-.01em;}
+.cash{font-family:'Jost';font-weight:600;font-size:46px;color:var(--orange);margin-top:18px;}
+.cash b{font-size:92px;letter-spacing:-.03em;}
+.cash span{color:var(--ink);font-weight:400;font-size:36px;}
+.vault{margin-top:34px;border:1px solid rgba(242,200,75,.4);border-radius:16px;background:rgba(242,200,75,.06);}
+.vault .vh{padding:16px 24px;border-bottom:1px solid rgba(242,200,75,.22);font-size:21px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--c-yellow);}
+.vault div.vi{display:flex;gap:14px;padding:16px 24px;font-size:26px;font-weight:500;}
+.vault div.vi::before{content:'★';color:var(--c-yellow);}
+.loop{margin-top:30px;display:flex;align-items:center;gap:26px;}
+.loop .ruler{flex:1;position:relative;display:grid;grid-template-columns:repeat(7,1fr);height:58px;}
+.loop .ruler div{border-left:2px solid var(--line2);font-size:17px;color:var(--muted);padding:2px 0 0 8px;}
+.loop .ruler div:last-child{border-right:2px solid var(--line2);}
+.loop .brace{position:absolute;left:0;right:0;top:30px;height:16px;background:var(--orange);border-radius:3px;}
+.loop .d{font-family:'Jost';font-weight:700;font-size:28px;line-height:1.15;}
+.loop .d b{color:var(--orange);font-size:60px;display:block;letter-spacing:-.03em;}
+
+/* ── Final ── */
+.cells{position:absolute;inset:0;display:grid;grid-template-columns:repeat(8,1fr);grid-auto-rows:1fr;gap:10px;padding:10px;opacity:.16;
+  -webkit-mask-image:radial-gradient(ellipse at 50% 65%,#000,transparent 72%);mask-image:radial-gradient(ellipse at 50% 65%,#000,transparent 72%);}
+.cells i{border-radius:6px;background:var(--tc);}
+.big{font-family:'Jost';font-weight:700;font-size:168px;letter-spacing:-.045em;line-height:.98;margin-top:70px;}
+.checks{margin-top:56px;display:flex;flex-wrap:wrap;gap:14px;}
+.checks span{font-size:26px;font-weight:600;padding:14px 22px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid var(--line2);}
+.checks span::before{content:'✓  ';color:var(--orange);}
+</style>
+</head>
+<body>
+
+<!-- ═══ 1 · HOOK ═══ -->
+<section class="story" id="s01">
+  <div class="grid-bg"></div><div class="glow" style="right:-520px;top:-380px"></div>
+  <div class="content">
+    <div class="tbar"><span class="mark"></span><span class="brand">Ableton Express</span><div class="tfield"><span class="play">▶</span><span>72.00<small>BPM</small></span></div></div>
+    <div><span class="scene"><b>Cena 01</b> Intro</span></div>
+    <h1>Você sabe<br>tocar. Agora<br>aprenda a<br><span class="hl">comandar.</span></h1>
+    <div class="session">
+      <div class="s-top"><span class="tab">Session</span><span>Arrangement</span><span class="file">Culto de Domingo.als · Sol maior</span></div>
+      <div class="s-grid">
+        <div class="s-head" style="--tc:var(--c-purple)">Pad</div><div class="s-head" style="--tc:var(--c-orange)">Keys</div><div class="s-head" style="--tc:var(--c-blue)">Bass</div><div class="s-head" style="--tc:var(--c-yellow)">Perc</div><div class="s-head" style="--tc:var(--c-cyan)">Drone</div><div class="s-head" style="--tc:var(--c-pink)">Bells</div><div class="s-head m">Master</div>
+        <div class="slot clip" style="--tc:var(--c-purple)">Intro</div><div class="slot clip" style="--tc:var(--c-orange)">Intro</div><div class="slot empty"></div><div class="slot empty"></div><div class="slot clip" style="--tc:var(--c-cyan)">Sol</div><div class="slot empty"></div><div class="scn">Intro</div>
+        <div class="slot clip" style="--tc:var(--c-purple)">Verso</div><div class="slot clip" style="--tc:var(--c-orange)">Arpejo</div><div class="slot clip" style="--tc:var(--c-blue)">Verso</div><div class="slot clip" style="--tc:var(--c-yellow)">Shaker</div><div class="slot empty"></div><div class="slot clip" style="--tc:var(--c-pink)">Leve</div><div class="scn">Verso</div>
+        <div class="slot clip on" style="--tc:var(--c-purple);--p:62%">Refrão<i></i></div><div class="slot clip on" style="--tc:var(--c-orange);--p:62%">Refrão<i></i></div><div class="slot clip on" style="--tc:var(--c-blue);--p:62%">Refrão<i></i></div><div class="slot clip on" style="--tc:var(--c-yellow);--p:62%">Groove<i></i></div><div class="slot clip on" style="--tc:var(--c-cyan);--p:62%">Shimmer<i></i></div><div class="slot clip on" style="--tc:var(--c-pink);--p:62%">Bells<i></i></div><div class="scn on">Refrão</div>
+        <div class="slot clip" style="--tc:var(--c-purple)">Ponte</div><div class="slot clip" style="--tc:var(--c-orange)">Ponte</div><div class="slot clip" style="--tc:var(--c-blue)">Pulso</div><div class="slot clip" style="--tc:var(--c-yellow)">Build</div><div class="slot empty"></div><div class="slot clip" style="--tc:var(--c-pink)">8va</div><div class="scn">Ponte</div>
+      </div>
+      <div class="meters">
+        <div class="meter"><i style="--lv:58%"></i><i style="--lv:52%"></i></div><div class="meter"><i style="--lv:72%"></i><i style="--lv:66%"></i></div><div class="meter"><i style="--lv:80%"></i><i style="--lv:76%"></i></div><div class="meter"><i style="--lv:64%"></i><i style="--lv:70%"></i></div><div class="meter"><i style="--lv:46%"></i><i style="--lv:50%"></i></div><div class="meter"><i style="--lv:55%"></i><i style="--lv:48%"></i></div><div class="meter"><i style="--lv:86%"></i><i style="--lv:82%"></i></div>
+      </div>
+    </div>
+    <div class="foot"><span class="cta">Conheça o curso <span class="tri"></span></span><span class="foot-note">Timbres, playback e click<br><b>do zero, no Ableton Live</b></span></div>
+  </div>
+</section>
+
+<!-- ═══ 2 · PROBLEMA ═══ -->
+<section class="story" id="s02">
+  <div class="grid-bg"></div><div class="glow" style="left:-700px;bottom:-500px"></div>
+  <div class="content">
+    <div class="tbar"><span class="mark"></span><span class="brand">Ableton Express</span><div class="tfield"><span>4 / 4</span><span>2. 1. 1</span></div></div>
+    <div><span class="scene"><b>Cena 02</b> O problema</span></div>
+    <h2>O papel do<br>tecladista mudou.<br><span class="hl">E ninguém te<br>ensinou</span> a parte<br>de trás do palco.</h2>
+    <div class="ab">
+      <div class="ab-col a"><p class="ab-label"><span class="k">A</span>Sem dominar o Ableton</p><ul>
+        <li>Depende de template de outra pessoa e trava quando precisa mudar algo</li>
+        <li>Sobe no palco com medo de travar o playback no meio do louvor</li>
+      </ul></div>
+      <div class="ab-col b"><p class="ab-label"><span class="k">B</span>Dominando o Ableton</p><ul>
+        <li>Monta qualquer setup do zero, do jeito que a sua igreja precisa</li>
+        <li>Toca com liberdade e a cabeça 100% na ministração</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 3 · PRA QUEM ═══ -->
+<section class="story light" id="s03">
+  <div class="content">
+    <div class="tbar"><span class="mark"></span><span class="brand">Ableton Express</span><div class="tfield"><span class="play">● REC</span></div></div>
+    <div><span class="scene"><b>Cena 03</b> Pra quem é</span></div>
+    <h2 style="font-size:124px">Este curso<br>é pra <span class="hl">você?</span></h2>
+    <p class="sub">Arme o que é a sua realidade hoje.</p>
+    <ul class="arm">
+      <div class="arm-head"><span>Record Arm</span><span>4 / 4</span></div>
+      <li class="on"><span class="dot"></span>Nunca abriu o Ableton e não sabe por onde começar</li>
+      <li class="on"><span class="dot"></span>Quer rodar playback e click com segurança na igreja</li>
+      <li class="on"><span class="dot"></span>Quer criar seus próprios timbres, racks e templates</li>
+      <li class="on"><span class="dot"></span>Cansou de depender dos outros pra resolver qualquer ajuste</li>
+      <div class="arm-res"><i></i>Armou pelo menos uma? Foi feito pra você.</div>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══ 4 · MÓDULOS ═══ -->
+<section class="story" id="s04">
+  <div class="grid-bg"></div>
+  <div class="content">
+    <div class="tbar"><span class="mark"></span><span class="brand">Ableton Express</span><div class="tfield"><span>Arrangement</span></div></div>
+    <div><span class="scene"><b>Cena 04</b> Módulos</span></div>
+    <h2>O que você<br>vai <span class="hl">aprender.</span></h2>
+    <div class="ov"><div class="ov-r"><span>1</span><span>5</span><span>9</span><span>13</span><span>17</span><span>21</span><span>25</span><span>29</span></div>
+      <div class="ov-s"><i style="--tc:var(--c-orange)"></i><i style="--tc:var(--c-purple)"></i><i style="--tc:var(--c-blue)"></i><i style="--tc:var(--c-yellow)"></i><i style="--tc:var(--c-cyan)"></i><i style="--tc:var(--c-pink)"></i><i class="new"></i><span class="ph"></span></div></div>
+    <div class="lanes">
+      <div class="lane" style="--tc:var(--c-orange)"><span class="n">01</span><div class="t"><h3>Primeiros passos</h3><p>Interface, configuração inicial e por onde começar</p></div></div>
+      <div class="lane" style="--tc:var(--c-purple)"><span class="n">02</span><div class="t"><h3>Construindo seu instrumento</h3><p>Do projeto vazio ao setup completo, Split e Dual Zones</p></div></div>
+      <div class="lane" style="--tc:var(--c-blue)"><span class="n">03</span><div class="t"><h3>Recursos que fazem a diferença</h3><p>Master, drone, plugins gratuitos e efeitos</p></div></div>
+      <div class="lane" style="--tc:var(--c-yellow)"><span class="n">04</span><div class="t"><h3>Click e Playback</h3><p>Click e VS integrados, com click global pra emergências</p></div></div>
+      <div class="lane" style="--tc:var(--c-cyan)"><span class="n">05</span><div class="t"><h3>Finalizando seu setup</h3><p>Template universal, mapeamentos MIDI e gravação</p></div></div>
+      <div class="lane" style="--tc:var(--c-pink)"><span class="n">06</span><div class="t"><h3>Templates e setup real <span class="gift">🎁 Presente</span></h3><p>Template Base Worship pra baixar + tour pelo setup real</p></div></div>
+    </div>
+    <div class="drop"><span class="plus">+</span><span><b>Novos módulos a caminho,</b> sem custo adicional.</span></div>
+  </div>
+</section>
+
+<!-- ═══ 5 · O QUE VEM JUNTO ═══ -->
+<section class="story light" id="s05">
+  <div class="content">
+    <div class="tbar"><span class="mark"></span><span class="brand">Ableton Express</span><div class="tfield"><span>Drum Rack</span></div></div>
+    <div><span class="scene"><b>Cena 05</b> O que vem junto</span></div>
+    <h2>Tudo pra montar<br>seu <span class="hl">setup<br>do zero.</span></h2>
+    <div class="pads">
+      <div class="pad" style="--tc:var(--c-orange)"><span class="nt">C1</span><b>Aulas gravadas</b></div>
+      <div class="pad" style="--tc:var(--c-purple)"><span class="nt">C#1</span><b>Projeto junto com você</b></div>
+      <div class="pad lit" style="--tc:var(--c-blue)"><span class="nt">D1</span><b>Routing completo</b></div>
+      <div class="pad" style="--tc:var(--c-yellow)"><span class="nt">D#1</span><b>Seu próprio template</b></div>
+      <div class="pad" style="--tc:var(--c-cyan)"><span class="nt">E1</span><b>Click e Multitracks</b></div>
+      <div class="pad" style="--tc:var(--c-pink)"><span class="nt">F1</span><b>Mapeamentos MIDI</b></div>
+      <div class="pad lit" style="--tc:var(--c-orange)"><span class="nt">F#1</span><b>🎁 Template Base Worship</b></div>
+      <div class="pad" style="--tc:var(--c-purple)"><span class="nt">G1</span><b>📚 Manual definitivo</b></div>
+      <div class="pad" style="--tc:var(--c-blue)"><span class="nt">G#1</span><b>🆘 Ableton S.O.S</b></div>
+      <div class="pad" style="--tc:var(--c-yellow)"><span class="nt">A1</span><b>Acesso vitalício</b></div>
+      <div class="pad" style="--tc:var(--c-cyan)"><span class="nt">A#1</span><b>Comunidade no Telegram</b></div>
+      <div class="pad go"><span class="nt">B1</span><span class="bt"></span><b>Atualizações incluídas</b></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 6 · INSTRUTOR ═══ -->
+<section class="story" id="s06">
+  <div class="grid-bg"></div><div class="glow" style="right:-600px;top:500px"></div>
+  <div class="content">
+    <div class="tbar"><span class="mark"></span><span class="brand">Ableton Express</span><div class="tfield"><span>Instrument Rack</span></div></div>
+    <div><span class="scene"><b>Cena 06</b> Quem vai te ensinar</span></div>
+    <p class="quote">“Em 2017 eu também comecei do zero. Numa época em que <span class="hl">não existia conteúdo sobre Ableton em português.”</span></p>
+    <div class="rack">
+      <div class="rack-bar"><span class="pwr"></span>Tiago Silva Rack<em>Macros</em></div>
+      <div class="rack-id"><p class="nm">TIAGO SILVA</p><p>Músico, produtor musical, engenheiro de mixagem e masterização, criador do “LITE KEYS” e instrutor</p></div>
+      <div class="knobs">
+        <div class="knob"><svg viewBox="0 0 78 78"><path class="trk" d="M16.4 61.6 A32 32 0 1 1 61.6 61.6"/><path class="va" d="M16.4 61.6 A32 32 0 1 1 61.6 61.6" stroke-dasharray="150.8" stroke-dashoffset="25"/><circle class="cap" cx="39" cy="39" r="21"/><line class="ptr" x1="39" y1="39" x2="39" y2="24" transform="rotate(90 39 39)"/></svg><span class="v">10</span><span class="l">anos de Ableton ao vivo</span></div>
+        <div class="knob"><svg viewBox="0 0 78 78"><path class="trk" d="M16.4 61.6 A32 32 0 1 1 61.6 61.6"/><path class="va" d="M16.4 61.6 A32 32 0 1 1 61.6 61.6" stroke-dasharray="150.8" stroke-dashoffset="0"/><circle class="cap" cx="39" cy="39" r="21"/><line class="ptr" x1="39" y1="39" x2="39" y2="24" transform="rotate(135 39 39)"/></svg><span class="v">6</span><span class="l">módulos completos</span></div>
+        <div class="knob"><svg viewBox="0 0 78 78"><path class="trk" d="M16.4 61.6 A32 32 0 1 1 61.6 61.6"/><path class="va" d="M16.4 61.6 A32 32 0 1 1 61.6 61.6" stroke-dasharray="150.8" stroke-dashoffset="34.8"/><circle class="cap" cx="39" cy="39" r="21"/><line class="ptr" x1="39" y1="39" x2="39" y2="24" transform="rotate(73 39 39)"/></svg><span class="v">+20</span><span class="l">aulas gravadas</span></div>
+        <div class="knob"><svg viewBox="0 0 78 78"><path class="trk" d="M16.4 61.6 A32 32 0 1 1 61.6 61.6"/><path class="va" d="M16.4 61.6 A32 32 0 1 1 61.6 61.6" stroke-dasharray="150.8" stroke-dashoffset="50.3"/><circle class="cap" cx="39" cy="39" r="21"/><line class="ptr" x1="39" y1="39" x2="39" y2="24" transform="rotate(45 39 39)"/></svg><span class="v">+4</span><span class="l">horas de conteúdo</span></div>
+      </div>
+    </div>
+    <div class="cred">
+      <div><span>Tecladista e produtor musical e de áudio do <b>DROPS</b></span></div>
+      <div><span>Estudou com profissionais da <b>Bethel Music</b></span></div>
+      <div><span>Criador do <b>Lite Keys</b>, usado no Brasil e no mundo</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 7 · ALUNOS ═══ -->
+<section class="story" id="s07">
+  <div class="grid-bg"></div>
+  <div class="content">
+    <div class="tbar"><span class="mark"></span><span class="brand">Ableton Express</span><div class="tfield"><span>Alunos</span></div></div>
+    <div><span class="scene"><b>Cena 07</b> Quem já entrou</span></div>
+    <h2 style="font-size:86px">Quem entrou já está<br><span class="hl">usando de verdade.</span></h2>
+    <div class="proofs">
+      <div class="proof r1" style="--tc:var(--c-purple);width:640px"><div class="bar">depoimento_02<em>aluno</em></div><div class="im"><img src="../../assets/depoimentos/depoimento-02.jpg" alt=""></div></div>
+      <div class="proof r2" style="--tc:var(--c-cyan);width:640px"><div class="bar">depoimento_03<em>aluno</em></div><div class="im"><img src="../../assets/depoimentos/depoimento-03.jpg" alt=""></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 8 · OFERTA ═══ -->
+<section class="story" id="s08">
+  <div class="grid-bg"></div><div class="glow" style="left:-500px;top:300px"></div>
+  <div class="content">
+    <div class="tbar"><span class="mark"></span><span class="brand">Ableton Express</span><div class="tfield"><span>Investimento</span></div></div>
+    <div><span class="scene"><b>Cena 08</b> Turma Fundadora</span></div>
+    <div class="dev">
+      <div class="dev-bar"><span class="pwr"></span>Ableton Express · Turma Fundadora</div>
+      <div class="dev-body">
+        <span class="badge">★ Turma Fundadora</span>
+        <p class="from">Preço oficial: R$297,00</p>
+        <p class="inst"><span>12x de </span>R$10,03</p>
+        <p class="cash">ou R$<b>97</b><span>,00 à vista</span></p>
+        <div class="vault"><div class="vh">🔒 Cofre do Ableton Express</div>
+          <div class="vi">Masterclass: O papel do tecladista na ministração</div>
+          <div class="vi">Masterclass: Como gravar suas Keyscams</div>
+        </div>
+        <div class="loop"><div class="ruler"><div>D1</div><div>D2</div><div>D3</div><div>D4</div><div>D5</div><div>D6</div><div>D7</div><span class="brace"></span></div><div class="d"><b>7 dias</b>de garantia</div></div>
+      </div>
+    </div>
+    <div class="foot"><span class="cta">Entrar na Turma <span class="tri"></span></span><span class="foot-note">Acesso imediato<br><b>e vitalício</b></span></div>
+  </div>
+</section>
+
+<!-- ═══ 9 · FINAL ═══ -->
+<section class="story" id="s09">
+  <div class="cells" id="cells"></div>
+  <div class="content">
+    <div class="tbar"><span class="mark"></span><span class="brand">Ableton Express</span><div class="tfield"><span class="play">▶</span><span>Cena final</span></div></div>
+    <div><span class="scene"><b>Cena 09</b> Sua vez</span></div>
+    <p class="big">Pare de<br>depender<br>do template<br><span class="hl">dos outros.</span></p>
+    <div class="checks"><span>Garantia de 7 dias</span><span>Acesso vitalício</span><span>Template de presente</span></div>
+    <div class="foot"><span class="cta">Quero descobrir o Ableton <span class="tri"></span></span></div>
+  </div>
+</section>
+
+<script>
+var c=document.getElementById('cells'),cols=['--c-purple','--c-orange','--c-blue','--c-yellow','--c-cyan','--c-pink'],h='';
+function sd(n){var x=Math.sin(n)*10000;return x-Math.floor(x);}
+for(var i=0;i<8*14;i++)h+=sd(i*3.3)>.42?'<i style="--tc:var('+cols[i%6]+')"></i>':'<span></span>';
+c.innerHTML=h;
+</script>
+</body>
+</html>
