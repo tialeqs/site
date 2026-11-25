@@ -163,6 +163,3 @@ def build(src: pathlib.Path, name: str):
 
 if __name__ == "__main__":
     build(root / "index.html", "ableton-express")
-    lk = root / "lite-keys" / "index.html"
-    if lk.exists():
-        build(lk, "lite-keys")
