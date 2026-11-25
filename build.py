@@ -15,14 +15,14 @@ root = pathlib.Path(__file__).parent
 
 
 def inline_images(html: str, base: pathlib.Path) -> str:
-    mime = {".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png"}
+    mime = {".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp": "image/webp"}
 
     def sub(m):
         path = base / m.group(1)
         b64 = base64.b64encode(path.read_bytes()).decode()
         return f'src="data:{mime[path.suffix.lower()]};base64,{b64}"'
 
-    return re.sub(r'src="(assets/[^"]+\.(?:jpe?g|png))"', sub, html)
+    return re.sub(r'src="(assets/[^"]+\.(?:jpe?g|png|webp))"', sub, html)
 
 
 def _html(ch):
@@ -58,6 +58,76 @@ def to_ascii(html: str) -> str:
     return res
 
 
+SCOPE = "#pg"
+
+
+def _split_top(sel: str):
+    parts, depth, cur = [], 0, ""
+    for ch in sel:
+        if ch in "([":
+            depth += 1
+        elif ch in ")]":
+            depth -= 1
+        if ch == "," and depth == 0:
+            parts.append(cur); cur = ""
+        else:
+            cur += ch
+    parts.append(cur)
+    return [p.strip() for p in parts if p.strip()]
+
+
+def _scope_selector(sel: str) -> str:
+    out = []
+    for s in _split_top(sel):
+        if s in (":root", "html", "::selection") or s.startswith("::"):
+            out.append(s)
+        elif s == "body":
+            out += ["body", SCOPE]
+        elif s == "*":
+            out += [SCOPE, f"{SCOPE} *"]
+        elif re.match(r"^(html|:root|body)[.\[:]", s) or s.startswith(("html ", ":root ", "body ")):
+            head, _, rest = s.partition(" ")
+            out.append(f"{head} {SCOPE} {rest}" if rest else f"{head} {SCOPE}")
+        else:
+            out.append(f"{SCOPE} {s}")
+    return ",".join(out)
+
+
+def scope_css(css: str) -> str:
+    """Prefixa todo seletor com #pg. Com um id na frente, o CSS da página sempre
+    ganha do CSS do tema do WordPress (Hello Elementor deixa botão com hover
+    rosa e white-space:nowrap, põe margem em título etc.)."""
+    css = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
+    out, i, n = [], 0, len(css)
+    while i < n:
+        j = css.find("{", i)
+        if j < 0:
+            out.append(css[i:]); break
+        head = css[i:j].strip()
+        # acha o fim do bloco, respeitando chaves aninhadas
+        depth, k = 1, j + 1
+        while depth and k < n:
+            if css[k] == "{": depth += 1
+            elif css[k] == "}": depth -= 1
+            k += 1
+        body = css[j + 1:k - 1]
+        if head.startswith("@media") or head.startswith("@supports"):
+            out.append(f"{head}{{{scope_css(body)}}}")
+        elif head.startswith("@"):
+            out.append(f"{head}{{{body}}}")
+        else:
+            out.append(f"{_scope_selector(head)}{{{body}}}")
+        i = k
+    return "\n".join(out)
+
+
+def scope_page(html: str) -> str:
+    html = re.sub(r"(<style[^>]*>)(.*?)(</style>)", lambda m: m.group(1) + scope_css(m.group(2)) + m.group(3), html, flags=re.S)
+    html = html.replace("<body>", f'<body>\n<div id="{SCOPE[1:]}">', 1)
+    i = html.rfind("</body>")
+    return html[:i] + "</div>\n" + html[i:]
+
+
 def wp_safe_scripts(html: str) -> str:
     """O WordPress troca '&' por '&#038;' dentro de <script> colado no bloco de
     HTML (quebra todo '&&' do JavaScript). Aqui cada script inline vira
@@ -71,7 +141,7 @@ def wp_safe_scripts(html: str) -> str:
 
 def build(src: pathlib.Path, name: str):
     html = src.read_text(encoding="utf-8")
-    html = to_ascii(inline_images(html, src.parent))
+    html = to_ascii(scope_page(inline_images(html, src.parent)))
     # 1) versão pro WordPress (é essa que vai no bloco de HTML personalizado)
     wp = wp_safe_scripts(html)
     assert "&&" not in re.sub(r"<style.*?</style>", "", wp, flags=re.S)
