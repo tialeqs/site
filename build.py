@@ -58,16 +58,36 @@ def to_ascii(html: str) -> str:
     return res
 
 
-def build(src: pathlib.Path, dest: pathlib.Path):
+def wp_safe_scripts(html: str) -> str:
+    """O WordPress troca '&' por '&#038;' dentro de <script> colado no bloco de
+    HTML (quebra todo '&&' do JavaScript). Aqui cada script inline vira
+    <script src="data:...base64">: base64 não tem & < > pro WordPress mexer."""
+    def sub(m):
+        b64 = base64.b64encode(m.group(1).encode("ascii")).decode()
+        return f'<script src="data:text/javascript;base64,{b64}"></script>'
+    out = re.sub(r"<script>(.*?)</script>", sub, html, flags=re.S)
+    return out
+
+
+def build(src: pathlib.Path, name: str):
     html = src.read_text(encoding="utf-8")
     html = to_ascii(inline_images(html, src.parent))
+    # 1) versão pro WordPress (é essa que vai no bloco de HTML personalizado)
+    wp = wp_safe_scripts(html)
+    assert "&&" not in re.sub(r"<style.*?</style>", "", wp, flags=re.S)
+    dest = root / "dist" / f"{name}.html"
     dest.parent.mkdir(exist_ok=True)
-    dest.write_text(html, encoding="ascii")
-    print(f"{dest.relative_to(root)}  {len(html)/1024:.0f} KB  (ASCII puro)")
+    dest.write_text(wp, encoding="ascii")
+    print(f"{dest.relative_to(root)}  {len(wp)/1024:.0f} KB  (WordPress)")
+    # 2) versão de preview (script legível; usada no artifact do Claude)
+    prev = root / "dist" / "preview" / f"{name}.html"
+    prev.parent.mkdir(exist_ok=True)
+    prev.write_text(html, encoding="ascii")
+    print(f"{prev.relative_to(root)}  {len(html)/1024:.0f} KB  (preview)")
 
 
 if __name__ == "__main__":
-    build(root / "index.html", root / "dist" / "ableton-express.html")
+    build(root / "index.html", "ableton-express")
     lk = root / "lite-keys" / "index.html"
     if lk.exists():
-        build(lk, root / "dist" / "lite-keys.html")
+        build(lk, "lite-keys")
