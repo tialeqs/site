@@ -1,0 +1,1658 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ableton Express</title>
+<meta name="description" content="Ableton Express: o curso que ensina o tecladista de igreja a montar, do zero, um setup completo de timbres, playback e click no Ableton Live.">
+<meta name="theme-color" content="#0f0f0e">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#0f0f0e;
+  --panel:#191917;
+  --panel2:#22221f;
+  --panel3:#2b2b27;
+  --line:#2e2d29;
+  --line2:#3b3a35;
+  --ink:#efeae0;
+  --muted:#a8a196;
+  --dim:#77716a;
+  --orange:#EE5D13;
+  --orange2:#ff7c3a;
+  --orange-dim:rgba(238,93,19,.13);
+  --play:#7ed957;
+  --c-purple:#a98bf0;
+  --c-orange:#f2803f;
+  --c-blue:#6b95f5;
+  --c-yellow:#f2c84b;
+  --c-cyan:#56c6dd;
+  --c-pink:#f07a9f;
+  --cream:#f0ead8;
+  --cream2:#e8e1cc;
+  --cream-line:#d6cdb9;
+  --cream-ink:#171511;
+  --cream-muted:#625a4f;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --display:'Jost',sans-serif;
+  --tbar:56px;
+}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--tbar) + 12px);}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:'Inter',sans-serif;font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;overflow-x:clip;
+}
+a{color:inherit;text-decoration:none;}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;}
+img{max-width:100%;display:block;}
+::selection{background:var(--orange);color:#fff;}
+:focus-visible{outline:2px solid var(--orange2);outline-offset:3px;border-radius:3px;}
+
+.container{max-width:1120px;margin:0 auto;padding:0 32px;}
+@media(max-width:600px){.container{padding:0 16px;}}
+.mono{font-family:var(--mono);}
+.hl{color:var(--orange);}
+
+/* ───────── TRANSPORT BAR ───────── */
+.transport{
+  position:sticky;top:0;z-index:100;height:var(--tbar);
+  display:flex;align-items:center;gap:14px;padding:0 20px;
+  background:rgba(20,20,18,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;}
+.brand-mark{width:22px;height:22px;border-radius:5px;background:var(--orange);display:grid;place-items:center;position:relative;overflow:hidden;}
+.brand-mark::after{content:'';border-left:8px solid #111;border-top:5px solid transparent;border-bottom:5px solid transparent;margin-left:2px;}
+.t-group{display:flex;align-items:center;gap:4px;padding:3px;border:1px solid var(--line2);border-radius:6px;background:#121211;}
+.t-btn{
+  width:32px;height:28px;border-radius:4px;display:grid;place-items:center;
+  color:var(--muted);transition:background .15s,color .15s;
+}
+.t-btn:hover{background:var(--panel3);color:var(--ink);}
+.t-btn svg{width:14px;height:14px;fill:currentColor;}
+.t-btn.on{color:#111;background:var(--play);}
+.t-btn.metro.on,.t-btn.kbd.on{background:var(--orange);color:#fff;}
+.t-field{
+  font-family:var(--mono);font-size:12px;color:var(--ink);
+  padding:4px 10px;border-radius:4px;background:#0b0b0a;border:1px solid var(--line);
+  white-space:nowrap;user-select:none;
+}
+.t-field small{color:var(--dim);font-size:10px;margin-left:4px;}
+.t-bpm{cursor:ns-resize;min-width:84px;text-align:center;}
+.t-bpm.tap{border-color:var(--orange);}
+.t-pos{min-width:92px;text-align:center;letter-spacing:.04em;}
+.t-cpu{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;color:var(--dim);}
+.t-cpu-bar{width:38px;height:6px;background:#0b0b0a;border:1px solid var(--line);border-radius:2px;overflow:hidden;}
+.t-cpu-bar i{display:block;height:100%;width:6%;background:var(--play);transition:width .3s;}
+.t-spacer{flex:1;}
+.t-cta{
+  font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:.02em;
+  background:var(--orange);color:#fff;padding:9px 18px;border-radius:5px;white-space:nowrap;
+  transition:transform .2s cubic-bezier(.23,1,.32,1),box-shadow .2s,background .2s;
+}
+.t-cta:hover{background:var(--orange2);}
+.scroll-head{position:absolute;left:0;bottom:-1px;height:2px;width:0;background:var(--orange);}
+@media(max-width:980px){.t-cpu,.t-kbd-wrap{display:none;}}
+@media(max-width:760px){.t-pos,.t-sig,.t-metro-wrap{display:none;}}
+@media(max-width:560px){
+  .transport{gap:8px;padding:0 12px;}
+  .t-bpm{display:none;}
+  .brand{font-size:12px;letter-spacing:.05em;}
+  .t-cta{padding:8px 12px;font-size:12px;}
+}
+@media(max-width:430px){#tStop{display:none;}.brand-text{font-size:11px;}}
+@media(max-width:340px){.brand-text{display:none;}}
+
+/* beat pulse (when transport runs) */
+html.beat .t-btn.play.on{box-shadow:0 0 0 3px rgba(126,217,87,.35);}
+html.beat .brand-mark{background:var(--orange2);}
+html.bar .hero h1 .hl{text-shadow:0 0 34px rgba(238,93,19,.55);}
+.hero h1 .hl{transition:text-shadow .25s ease;}
+
+/* ───────── SCENE RAIL (desktop) ───────── */
+.scene-rail{
+  position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:90;
+  display:flex;flex-direction:column;gap:3px;
+  padding:6px;border:1px solid var(--line);border-radius:8px;background:rgba(20,20,18,.85);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.scene-rail a{
+  position:relative;display:flex;align-items:center;justify-content:center;
+  width:30px;height:22px;border-radius:3px;font-family:var(--mono);font-size:9px;color:var(--dim);
+  background:#121211;transition:background .2s,color .2s;
+}
+.scene-rail a::before{content:'';border-left:6px solid currentColor;border-top:4px solid transparent;border-bottom:4px solid transparent;margin-right:4px;}
+.scene-rail a:hover{color:var(--ink);background:var(--panel3);}
+.scene-rail a.active{color:#111;background:var(--play);}
+.scene-rail a span{
+  position:absolute;right:38px;top:50%;transform:translateY(-50%) translateX(6px);
+  white-space:nowrap;font-size:11px;color:var(--ink);background:var(--panel3);
+  padding:3px 9px;border-radius:4px;opacity:0;pointer-events:none;transition:opacity .15s,transform .15s;
+}
+.scene-rail a:hover span{opacity:1;transform:translateY(-50%) translateX(0);}
+@media(max-width:1260px){.scene-rail{display:none;}}
+
+/* ───────── INFO VIEW (desktop) ───────── */
+.info-view{
+  position:fixed;left:14px;bottom:14px;z-index:90;width:264px;
+  border:1px solid var(--line2);border-radius:8px;background:rgba(24,24,22,.94);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  padding:12px 14px 13px;font-size:12px;line-height:1.5;color:var(--muted);
+  box-shadow:0 12px 40px rgba(0,0,0,.4);
+  transition:opacity .25s,transform .25s;
+}
+.info-view.hidden{opacity:0;transform:translateY(10px);pointer-events:none;}
+.info-view h4{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--ink);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px;}
+.info-view h4 em{font-style:normal;color:var(--dim);font-weight:400;}
+.info-close{position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:3px;color:var(--dim);font-size:14px;line-height:1;}
+.info-close:hover{color:var(--ink);background:var(--panel3);}
+.info-tag{display:inline-block;margin-top:8px;font-family:var(--mono);font-size:9px;letter-spacing:.08em;color:var(--dim);text-transform:uppercase;}
+@media(max-width:1100px),(hover:none){.info-view{display:none;}}
+
+/* ───────── REVEALS ───────── */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.16,1,.3,1);}
+.reveal.in{opacity:1;transform:none;}
+.d1{transition-delay:.08s;}.d2{transition-delay:.16s;}.d3{transition-delay:.24s;}.d4{transition-delay:.32s;}
+.split .line{display:block;overflow:hidden;padding-bottom:.12em;margin-bottom:-.12em;}
+.split .line>span{display:block;transform:translateY(110%);transition:transform .85s cubic-bezier(.16,1,.3,1);}
+.split.in .line>span{transform:none;}
+
+/* ───────── SECTION SHARED ───────── */
+section{position:relative;}
+.sec{padding:112px 0;border-bottom:1px solid var(--line);}
+@media(max-width:600px){.sec{padding:72px 0;}}
+.scene-label{
+  display:flex;align-items:center;gap:12px;margin-bottom:36px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);
+}
+.scene-label b{
+  display:inline-flex;align-items:center;gap:6px;color:#111;background:var(--muted);
+  padding:3px 8px;border-radius:3px;font-weight:700;letter-spacing:.06em;
+}
+.scene-label b::before{content:'';border-left:6px solid currentColor;border-top:4px solid transparent;border-bottom:4px solid transparent;}
+.in-view .scene-label b{background:var(--play);}
+.scene-label::after{content:'';flex:1;height:1px;background:var(--line);}
+.light .scene-label{color:#8d8373;}
+.light .scene-label::after{background:var(--cream-line);}
+.light .scene-label b{background:#b9ae99;}
+.light.in-view .scene-label b{background:var(--cream-ink);color:var(--cream);}
+.h-big{
+  font-family:var(--display);font-size:clamp(36px,5.4vw,70px);font-weight:600;
+  line-height:1.04;letter-spacing:-.03em;margin-bottom:40px;max-width:800px;
+}
+@media(max-width:600px){.h-big{font-size:clamp(32px,9vw,46px);margin-bottom:28px;}}
+.light{background:var(--cream);color:var(--cream-ink);border-bottom-color:var(--cream-line);}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:12px;
+  font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:.02em;
+  background:var(--orange);color:#fff;padding:17px 30px;border-radius:6px;
+  transition:transform .2s cubic-bezier(.23,1,.32,1),box-shadow .2s,background .2s;
+  position:relative;overflow:hidden;
+}
+.btn:hover{background:var(--orange2);}
+.btn .tri{border-left:9px solid currentColor;border-top:6px solid transparent;border-bottom:6px solid transparent;}
+.btn-note{margin-top:14px;font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.04em;}
+
+/* ───────── HERO ───────── */
+.hero{padding:72px 0 88px;border-bottom:1px solid var(--line);overflow:hidden;}
+.hero-grid-bg{
+  position:absolute;inset:0;pointer-events:none;opacity:.55;
+  background-image:
+    linear-gradient(to right,rgba(255,255,255,.035) 1px,transparent 1px),
+    linear-gradient(to bottom,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:64px 100%,100% 32px;
+  mask-image:radial-gradient(ellipse at 70% 40%,#000 20%,transparent 75%);
+  -webkit-mask-image:radial-gradient(ellipse at 70% 40%,#000 20%,transparent 75%);
+}
+.hero-glow{position:absolute;width:720px;height:720px;right:-200px;top:-260px;background:radial-gradient(circle,rgba(238,93,19,.16),transparent 60%);pointer-events:none;}
+.hero-wrap{position:relative;display:grid;grid-template-columns:.92fr 1.08fr;gap:56px;align-items:center;}
+@media(max-width:1000px){.hero-wrap{grid-template-columns:1fr;gap:48px;}}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:10px;margin-bottom:28px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
+  padding:6px 12px 6px 8px;border:1px solid var(--line2);border-radius:100px;
+}
+.hero-tag i{width:8px;height:8px;border-radius:50%;background:var(--play);box-shadow:0 0 10px var(--play);animation:blink 2s infinite;}
+@keyframes blink{50%{opacity:.35;}}
+.hero h1{
+  font-family:var(--display);font-size:clamp(48px,5.7vw,86px);font-weight:600;
+  line-height:1.02;letter-spacing:-.035em;margin-bottom:32px;
+}
+@media(max-width:600px){.hero h1{font-size:clamp(44px,13vw,64px);margin-bottom:24px;}}
+.hero-sub{max-width:470px;font-size:17px;color:var(--muted);line-height:1.7;margin-bottom:34px;}
+.hero-sub strong{color:var(--ink);font-weight:600;}
+.hero-by{display:flex;align-items:center;gap:10px;margin-top:28px;font-size:13px;color:var(--muted);}
+.hero-by b{color:var(--ink);font-weight:600;}
+.hero-by .sig{font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;padding-left:10px;border-left:1px solid var(--line2);}
+@media(max-width:600px){.hero-tag{font-size:9.5px;letter-spacing:.05em;}.hero{padding:44px 0 64px;}.hero-cta .btn{width:100%;}.hero-sub{font-size:15.5px;}}
+
+/* SESSION VIEW TOY */
+.session{
+  position:relative;background:#1c1c1a;border:1px solid var(--line2);border-radius:12px;
+  box-shadow:0 40px 90px rgba(0,0,0,.55),0 0 0 1px rgba(0,0,0,.4);
+  font-family:var(--mono);font-size:10px;color:var(--muted);overflow:hidden;
+  user-select:none;-webkit-user-select:none;
+}
+.s-top{display:flex;align-items:center;gap:10px;padding:9px 12px;background:#151514;border-bottom:1px solid var(--line);}
+.s-tabs{display:flex;gap:2px;}
+.s-tabs span{padding:3px 8px;border-radius:3px;font-size:10px;}
+.s-tabs span.on{background:var(--panel3);color:var(--ink);}
+.s-file{margin-left:auto;color:var(--dim);font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.s-file b{color:var(--muted);font-weight:500;}
+.s-grid{
+  display:grid;grid-template-columns:repeat(6,minmax(0,1fr)) 64px;gap:3px;padding:8px;
+}
+.s-head{
+  height:24px;display:flex;align-items:center;padding:0 7px;border-radius:3px;
+  background:var(--tc);color:#111;font-weight:700;font-size:10px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.s-head.master{background:#3a3a36;color:var(--ink);}
+.slot{
+  position:relative;height:32px;border-radius:3px;background:#262623;
+  display:flex;align-items:center;gap:6px;padding:0 7px;overflow:hidden;
+}
+.slot.empty::after{content:'';width:7px;height:7px;border:1px solid #444;border-radius:1px;margin:auto;}
+.clip{
+  background:color-mix(in srgb,var(--tc) 72%,#1c1c1a);color:#111;cursor:pointer;
+  transition:filter .15s,transform .1s;
+}
+.clip:hover{filter:brightness(1.12);}
+.clip:active{transform:scale(.97);}
+.clip .ico{flex:0 0 auto;width:0;height:0;border-left:7px solid rgba(0,0,0,.55);border-top:4.5px solid transparent;border-bottom:4.5px solid transparent;}
+.clip .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500;}
+.clip .prog{position:absolute;left:0;bottom:0;height:3px;width:0;background:rgba(0,0,0,.45);}
+.clip.queued .ico{animation:qblink .25s steps(1) infinite;}
+@keyframes qblink{50%{border-left-color:var(--play);}}
+.clip.playing{background:var(--tc);}
+.clip.playing .ico{border-left-color:#0d3d00;}
+.clip.playing::before{content:'';position:absolute;inset:0;border:1.5px solid rgba(255,255,255,.65);border-radius:3px;pointer-events:none;}
+.scene-btn{
+  height:32px;border-radius:3px;background:#2e2e2a;display:flex;align-items:center;gap:6px;padding:0 8px;
+  color:var(--ink);cursor:pointer;transition:background .15s;
+}
+.scene-btn:hover{background:#3b3b36;}
+.scene-btn::before{content:'';flex:0 0 auto;border-left:7px solid var(--muted);border-top:4.5px solid transparent;border-bottom:4.5px solid transparent;}
+.scene-btn.playing::before{border-left-color:var(--play);}
+.scene-btn span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tstop{height:22px;border-radius:3px;background:#222220;display:grid;place-items:center;cursor:pointer;}
+.tstop::after{content:'';width:8px;height:8px;background:#5a5a54;border-radius:1px;}
+.tstop:hover::after{background:var(--ink);}
+.tstop.master{font-size:9px;color:var(--muted);}
+.tstop.master::after{display:none;}
+.s-mixer{display:grid;grid-template-columns:repeat(6,minmax(0,1fr)) 64px;gap:3px;padding:0 8px 10px;}
+.meter{height:46px;border-radius:3px;background:#111110;position:relative;overflow:hidden;display:flex;gap:2px;padding:3px;justify-content:center;}
+.meter i{width:5px;height:100%;background:#1a1a18;position:relative;border-radius:1px;overflow:hidden;}
+.meter i::after{
+  content:'';position:absolute;left:0;right:0;bottom:0;height:var(--lv,0%);
+  background:linear-gradient(to top,#5fd35a 0%,#5fd35a 65%,#f2c84b 82%,#ee5d13 100%);
+  background-size:100% 40px;background-position:bottom;
+}
+.meter .vol{position:absolute;left:4px;bottom:4px;font-size:8px;color:var(--dim);}
+.s-hint{
+  position:absolute;left:50%;bottom:72px;transform:translateX(-50%);
+  background:var(--ink);color:#111;font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;
+  padding:9px 14px;border-radius:7px;white-space:nowrap;pointer-events:none;
+  box-shadow:0 10px 30px rgba(0,0,0,.4);transition:opacity .4s,transform .4s;
+  animation:hintbob 2.4s ease-in-out infinite;
+}
+.s-hint::after{content:'';position:absolute;left:50%;top:-6px;transform:translateX(-50%);border-bottom:6px solid var(--ink);border-left:6px solid transparent;border-right:6px solid transparent;}
+.s-hint kbd{font-family:var(--mono);font-size:10px;background:#111;color:var(--ink);padding:1px 5px;border-radius:3px;margin-left:2px;}
+.s-hint.gone{opacity:0;transform:translateX(-50%) translateY(6px);animation:none;}
+@keyframes hintbob{50%{transform:translateX(-50%) translateY(-4px);}}
+.s-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 12px;border-top:1px solid var(--line);background:#151514;color:var(--dim);font-size:9.5px;}
+.s-foot .key{color:var(--muted);}
+@media(max-width:600px){
+  .s-grid,.s-mixer{grid-template-columns:repeat(6,minmax(0,1fr)) 40px;gap:2px;padding-left:5px;padding-right:5px;}
+  .slot,.scene-btn{height:30px;padding:0 4px;gap:3px;}
+  .clip .nm{font-size:8.5px;}
+  .clip .ico{border-left-width:5px;border-top-width:3.5px;border-bottom-width:3.5px;}
+  .s-head{font-size:8.5px;padding:0 4px;}
+  .scene-btn span{display:none;}
+  .scene-btn{justify-content:center;}
+  .meter{height:36px;}.meter i{width:3px;}
+  .s-foot .hide-m{display:none;}
+  .s-hint{font-size:11.5px;bottom:58px;}
+}
+
+/* ───────── TICKER ───────── */
+.ticker{background:var(--orange);color:#140a04;overflow:hidden;border-bottom:1px solid #b9440b;}
+.ticker-track{display:flex;width:max-content;animation:tick 38s linear infinite;}
+.ticker-track span{
+  display:flex;align-items:center;gap:28px;padding:16px 14px;white-space:nowrap;
+  font-family:var(--display);font-weight:700;font-size:clamp(22px,3vw,34px);letter-spacing:-.01em;text-transform:uppercase;
+}
+.ticker-track span::after{content:'';width:0;height:0;border-left:13px solid currentColor;border-top:8px solid transparent;border-bottom:8px solid transparent;opacity:.55;}
+@keyframes tick{to{transform:translateX(-50%);}}
+
+/* ───────── PROBLEM / CROSSFADER ───────── */
+.problem-intro{font-size:17px;color:var(--muted);max-width:600px;margin-bottom:52px;line-height:1.75;}
+.xf-panel{border:1px solid var(--line2);border-radius:12px;background:var(--panel);overflow:hidden;}
+.xf-cols{display:grid;grid-template-columns:1fr 1fr;}
+@media(max-width:720px){.xf-cols{grid-template-columns:1fr;}}
+.xf-col{padding:34px 34px 30px;transition:opacity .25s,filter .25s;}
+.xf-col.a{border-right:1px solid var(--line);}
+@media(max-width:720px){.xf-col.a{border-right:0;border-bottom:1px solid var(--line);}.xf-col{padding:26px 22px;}}
+.xf-label{display:flex;align-items:center;gap:10px;margin-bottom:18px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;}
+.xf-label .ab{width:24px;height:24px;border-radius:4px;display:grid;place-items:center;font-weight:700;font-size:12px;}
+.xf-col.a .xf-label{color:var(--muted);}
+.xf-col.a .ab{background:#3a3934;color:var(--ink);}
+.xf-col.b .xf-label{color:var(--orange);}
+.xf-col.b .ab{background:var(--orange);color:#fff;}
+.xf-list{list-style:none;}
+.xf-list li{display:flex;gap:12px;padding:13px 0;border-top:1px solid var(--line);font-size:15px;line-height:1.55;}
+.xf-col.a li{color:var(--muted);}
+.xf-col.b li{color:var(--ink);font-weight:500;}
+.xf-list li::before{flex:0 0 auto;font-family:var(--mono);font-size:12px;margin-top:2px;}
+.xf-col.a li::before{content:'✕';color:#7b756c;}
+.xf-col.b li::before{content:'✓';color:var(--orange);}
+.xf-bar{display:flex;align-items:center;gap:16px;padding:18px 34px;border-top:1px solid var(--line);background:#141413;}
+@media(max-width:720px){.xf-bar{padding:16px 22px;}}
+.xf-bar .lbl{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--muted);}
+.xf-bar .cap{font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;}
+@media(max-width:520px){.xf-bar .cap{display:none;}}
+.xf{flex:1;-webkit-appearance:none;appearance:none;height:28px;background:transparent;cursor:ew-resize;}
+.xf::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:linear-gradient(90deg,#3a3934,#0b0b0a 50%,var(--orange));}
+.xf::-moz-range-track{height:6px;border-radius:3px;background:linear-gradient(90deg,#3a3934,#0b0b0a 50%,var(--orange));}
+.xf::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:28px;margin-top:-11px;border-radius:4px;background:linear-gradient(#e9e4d8,#b8b2a6);border:1px solid #000;box-shadow:0 3px 10px rgba(0,0,0,.5),inset 0 -2px 0 rgba(0,0,0,.2);}
+.xf::-moz-range-thumb{width:22px;height:28px;border-radius:4px;background:linear-gradient(#e9e4d8,#b8b2a6);border:1px solid #000;}
+
+/* ───────── FOR WHO / ARM ───────── */
+.for-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start;}
+@media(max-width:860px){.for-grid{grid-template-columns:1fr;gap:36px;}}
+.for-story p{font-size:18px;font-weight:500;line-height:1.75;color:var(--cream-ink);}
+.for-story strong{font-style:italic;}
+.arm-panel{border:1px solid var(--cream-line);border-radius:12px;background:#f6f1e3;overflow:hidden;}
+.arm-head{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-bottom:1px solid var(--cream-line);font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8d8373;}
+.arm-list{list-style:none;}
+.arm-list li{border-bottom:1px solid var(--cream-line);}
+.arm-list li:last-child{border-bottom:0;}
+.arm-row{
+  width:100%;display:flex;align-items:center;gap:16px;padding:16px 18px;text-align:left;
+  font-size:15.5px;line-height:1.5;font-weight:500;color:var(--cream-ink);transition:background .2s;
+}
+.arm-row:hover{background:#efe8d6;}
+.arm-dot{
+  flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:1.5px solid #b9ae99;
+  display:grid;place-items:center;transition:all .2s;
+}
+.arm-dot::after{content:'';width:12px;height:12px;border-radius:50%;background:#cfc5b1;transition:all .2s;}
+.arm-row[aria-pressed="true"] .arm-dot{border-color:var(--orange);background:rgba(238,93,19,.1);}
+.arm-row[aria-pressed="true"] .arm-dot::after{background:var(--orange);box-shadow:0 0 12px rgba(238,93,19,.8);}
+.arm-row[aria-pressed="true"]{background:#fbf3e7;}
+.arm-result{
+  padding:16px 18px;border-top:1px solid var(--cream-line);background:var(--cream-ink);color:var(--cream);
+  font-family:var(--display);font-size:16px;font-weight:500;display:flex;align-items:center;gap:12px;
+  min-height:58px;transition:background .3s;
+}
+.arm-result .rec{width:10px;height:10px;border-radius:50%;background:#555;flex:0 0 auto;transition:background .3s;}
+.arm-result.on .rec{background:var(--orange);box-shadow:0 0 12px var(--orange);animation:blink 1.2s infinite;}
+.for-not{margin-top:22px;font-family:var(--mono);font-size:12px;color:#8d8373;letter-spacing:.02em;}
+
+/* ───────── MODULES / ARRANGEMENT ───────── */
+.shot{border:1px solid var(--line2);border-radius:12px;overflow:hidden;background:var(--panel);margin-bottom:72px;box-shadow:0 30px 80px rgba(0,0,0,.45);}
+.shot-bar{display:flex;align-items:center;gap:7px;padding:10px 14px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:10px;color:var(--dim);}
+.shot-bar i{width:9px;height:9px;border-radius:50%;background:#3a3934;}
+.shot-bar span{margin-left:8px;}
+.shot img{width:100%;}
+.arr-overview{
+  position:sticky;top:calc(var(--tbar) + 10px);z-index:5;margin-bottom:22px;
+  border:1px solid var(--line2);border-radius:8px;background:rgba(25,25,23,.94);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:8px 10px 10px;
+}
+.arr-ruler{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;color:var(--dim);padding:0 2px 5px;}
+.arr-strip{position:relative;display:grid;grid-template-columns:repeat(6,1fr) .6fr;gap:3px;height:18px;}
+.arr-strip i{border-radius:2px;background:color-mix(in srgb,var(--tc) 55%,#1c1c1a);transition:background .2s;}
+.arr-strip i.on{background:var(--tc);}
+.arr-strip i.new{background:repeating-linear-gradient(45deg,#2a2a27 0 4px,#1e1e1c 4px 8px);}
+.arr-play{position:absolute;top:-22px;bottom:-4px;left:0;width:2px;background:var(--ink);box-shadow:0 0 10px rgba(255,255,255,.4);}
+.arr-play::before{content:'';position:absolute;top:0;left:-5px;border-top:8px solid var(--ink);border-left:6px solid transparent;border-right:6px solid transparent;}
+.arr-track{display:grid;grid-template-columns:220px 1fr;gap:3px;margin-bottom:3px;}
+@media(max-width:760px){.arr-track{grid-template-columns:1fr;}}
+.arr-head{
+  display:flex;flex-direction:column;justify-content:space-between;gap:10px;padding:16px 16px 14px;
+  background:var(--panel2);border-radius:6px 0 0 6px;border-left:4px solid var(--tc);
+  transition:background .3s;
+}
+@media(max-width:760px){.arr-head{flex-direction:row;align-items:center;border-radius:6px 6px 0 0;padding:12px 14px;}}
+.arr-num{font-family:var(--display);font-size:44px;font-weight:700;line-height:.9;letter-spacing:-.03em;color:var(--tc);}
+@media(max-width:760px){.arr-num{font-size:30px;}}
+.arr-btns{display:flex;gap:3px;}
+.arr-btns span{width:22px;height:18px;border-radius:2px;background:#33332f;font-family:var(--mono);font-size:9px;display:grid;place-items:center;color:var(--dim);}
+.arr-track.on .arr-btns span:first-child{background:var(--c-yellow);color:#111;}
+.arr-track.on .arr-head{background:#2c2c28;}
+.arr-lane{background:#1a1a18;border-radius:0 6px 6px 0;padding:8px;}
+@media(max-width:760px){.arr-lane{border-radius:0 0 6px 6px;}}
+.arr-clip{
+  position:relative;border-radius:5px;overflow:hidden;height:100%;
+  background:color-mix(in srgb,var(--tc) 16%,#1e1e1c);border:1px solid color-mix(in srgb,var(--tc) 40%,transparent);
+  transition:border-color .3s,background .3s;
+}
+.arr-track.on .arr-clip{border-color:var(--tc);background:color-mix(in srgb,var(--tc) 22%,#1e1e1c);}
+.arr-clip-bar{display:flex;align-items:center;gap:8px;padding:6px 12px;background:var(--tc);color:#111;font-family:var(--mono);font-size:10.5px;font-weight:700;}
+.arr-clip-bar .gift{margin-left:auto;background:#111;color:var(--c-yellow);padding:1px 7px;border-radius:3px;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;}
+.arr-notes{position:absolute;left:0;right:0;top:28px;bottom:0;pointer-events:none;opacity:.22;mask-image:linear-gradient(to right,transparent 45%,#000 85%);-webkit-mask-image:linear-gradient(to right,transparent 45%,#000 85%);}
+.arr-body{position:relative;padding:16px 18px 18px;}
+.arr-body h3{font-family:var(--display);font-size:22px;font-weight:600;letter-spacing:-.01em;margin-bottom:6px;color:var(--ink);}
+.arr-body p{font-size:14.5px;line-height:1.65;color:var(--muted);margin-bottom:14px;max-width:640px;}
+.arr-body p strong{color:var(--ink);font-weight:600;}
+.devs{display:flex;flex-wrap:wrap;gap:5px;}
+.devs span{font-family:var(--mono);font-size:10.5px;padding:4px 9px;border-radius:3px;background:#121211;border:1px solid var(--line2);color:var(--muted);}
+.arr-drop{
+  margin-top:10px;border:1.5px dashed #4a4942;border-radius:8px;padding:26px 24px;
+  display:flex;align-items:center;gap:18px;color:var(--muted);transition:border-color .3s,background .3s;
+}
+.arr-drop:hover{border-color:var(--orange);background:rgba(238,93,19,.05);}
+.arr-drop .plus{flex:0 0 auto;width:42px;height:42px;border-radius:8px;border:1px solid var(--line2);display:grid;place-items:center;font-size:22px;color:var(--orange);}
+.arr-drop p{font-size:15px;line-height:1.55;}
+.arr-drop strong{display:block;color:var(--ink);font-family:var(--display);font-size:17px;font-weight:600;}
+.arr-drop em{display:block;font-style:normal;font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.06em;margin-top:4px;}
+
+/* ───────── SOCIAL ───────── */
+.social{background:#121211;}
+.social-intro{font-size:17px;color:var(--muted);max-width:520px;margin:-20px 0 44px;}
+.social-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
+.proof{
+  background:var(--panel);border:1px solid var(--line2);border-radius:10px;overflow:hidden;cursor:zoom-in;
+  transition:transform .35s cubic-bezier(.16,1,.3,1),border-color .3s,box-shadow .35s;text-align:left;
+}
+.proof:hover{transform:translateY(-4px) rotate(-.3deg);border-color:var(--tc);box-shadow:0 24px 60px rgba(0,0,0,.45);}
+.proof-bar{display:flex;align-items:center;gap:8px;padding:7px 12px;background:var(--tc);color:#111;font-family:var(--mono);font-size:10.5px;font-weight:700;}
+.proof-bar::before{content:'';border-left:7px solid rgba(0,0,0,.6);border-top:4.5px solid transparent;border-bottom:4.5px solid transparent;}
+.proof-bar em{margin-left:auto;font-style:normal;font-weight:400;opacity:.7;}
+.proof-img{aspect-ratio:1/1;display:grid;place-items:center;padding:18px;background:
+  radial-gradient(circle at 50% 40%,color-mix(in srgb,var(--tc) 12%,transparent),transparent 70%),#171716;}
+.proof-img img{max-height:100%;width:auto;border-radius:8px;box-shadow:0 12px 34px rgba(0,0,0,.5);}
+.social-hint{display:none;font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:14px;}
+@media(max-width:700px){
+  .social-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin:0 -16px;padding:0 16px 6px;scrollbar-width:none;}
+  .social-grid::-webkit-scrollbar{display:none;}
+  .proof{flex:0 0 86%;scroll-snap-align:center;}
+  .proof:hover{transform:none;}
+  .social-hint{display:block;}
+}
+.lightbox{border:0;padding:0;background:transparent;max-width:min(92vw,760px);max-height:92vh;margin:auto;}
+.lightbox::backdrop{background:rgba(5,5,4,.88);backdrop-filter:blur(6px);}
+.lightbox img{max-height:86vh;width:auto;margin:auto;border-radius:10px;}
+.lb-close{position:fixed;top:16px;right:16px;width:44px;height:44px;border-radius:50%;background:var(--ink);color:#111;font-size:22px;line-height:1;}
+
+/* ───────── FOUNDER ───────── */
+.founder-wrap{display:grid;grid-template-columns:1fr 340px;gap:72px;align-items:start;}
+@media(max-width:900px){.founder-wrap{grid-template-columns:1fr;gap:48px;}}
+.founder-quote{
+  font-family:var(--display);font-size:clamp(26px,3.4vw,42px);font-weight:600;line-height:1.16;letter-spacing:-.02em;margin-bottom:32px;
+}
+.founder-body>p{font-size:16px;color:var(--muted);line-height:1.8;margin-bottom:16px;max-width:620px;}
+.founder-body>p strong{color:var(--ink);font-weight:600;}
+.traj-title{margin:52px 0 22px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);display:flex;align-items:center;gap:10px;}
+.traj-title::before{content:'';width:10px;height:10px;border-radius:2px;background:var(--orange);}
+.traj{position:relative;list-style:none;padding-left:36px;}
+.traj::before{content:'';position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:var(--line2);}
+.traj-fill{position:absolute;left:9px;top:6px;width:2px;height:0;background:var(--orange);box-shadow:0 0 12px rgba(238,93,19,.6);}
+.traj li{position:relative;padding-bottom:26px;}
+.traj li:last-child{padding-bottom:0;}
+.traj li::before{
+  content:'';position:absolute;left:-31px;top:6px;width:10px;height:10px;border-radius:2px;
+  background:var(--bg);border:2px solid var(--line2);transition:all .3s;
+}
+.traj li.lit::before{background:var(--orange);border-color:var(--orange);box-shadow:0 0 0 4px rgba(238,93,19,.18);}
+.traj .when{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--orange);text-transform:uppercase;}
+.traj p{font-size:15px;color:var(--muted);line-height:1.75;margin-top:4px;max-width:600px;}
+.traj p strong,.traj p em{color:var(--ink);}
+.traj p strong{font-weight:600;}
+
+.founder-side{position:sticky;top:calc(var(--tbar) + 24px);display:flex;flex-direction:column;gap:14px;}
+@media(max-width:900px){.founder-side{position:static;}}
+.photo-frame{border:1px solid var(--line2);border-radius:10px;overflow:hidden;background:var(--panel);}
+.photo-frame img{width:100%;}
+.rack{border:1px solid var(--line2);border-radius:10px;background:var(--panel2);overflow:hidden;}
+.rack-bar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#2f2f2b;font-family:var(--mono);font-size:10.5px;color:var(--ink);}
+.rack-bar .pwr{width:14px;height:14px;border-radius:50%;background:var(--orange);box-shadow:0 0 8px rgba(238,93,19,.7);}
+.rack-bar em{margin-left:auto;font-style:normal;color:var(--dim);}
+.rack-id{padding:16px 16px 4px;}
+.rack-name{font-family:var(--display);font-size:20px;font-weight:700;letter-spacing:.04em;}
+.rack-role{font-size:12.5px;color:var(--muted);line-height:1.6;margin-top:4px;}
+.knobs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:14px 10px 16px;}
+.knob{display:flex;flex-direction:column;align-items:center;text-align:center;padding:10px 6px 12px;border-radius:6px;background:#1b1b19;}
+.knob svg{width:78px;height:78px;overflow:visible;}
+.knob .trk{fill:none;stroke:#3a3934;stroke-width:5;stroke-linecap:round;}
+.knob .val-arc{fill:none;stroke:var(--orange);stroke-width:5;stroke-linecap:round;transition:stroke-dashoffset 1.6s cubic-bezier(.16,1,.3,1);}
+.knob .cap{fill:#2c2c28;stroke:#121211;stroke-width:1.5;}
+.knob .ptr{stroke:var(--ink);stroke-width:2.5;stroke-linecap:round;transform-origin:39px 39px;transition:transform 1.6s cubic-bezier(.16,1,.3,1);}
+.knob .num{font-family:var(--display);font-size:28px;font-weight:700;line-height:1;margin-top:4px;color:var(--ink);letter-spacing:-.02em;}
+.knob .lbl{font-family:var(--mono);font-size:9.5px;color:var(--muted);letter-spacing:.02em;margin-top:5px;line-height:1.35;}
+
+/* ───────── WHAT YOU GET / DRUM RACK ───────── */
+.rack-hint{display:flex;align-items:center;gap:10px;margin:-16px 0 36px;font-family:var(--mono);font-size:11.5px;color:#7d7363;}
+.rack-hint i{width:8px;height:8px;border-radius:50%;background:var(--orange);animation:blink 1.6s infinite;}
+.pads{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:14px;background:#211f1a;border-radius:14px;box-shadow:inset 0 2px 0 rgba(255,255,255,.04),0 30px 60px rgba(40,30,10,.25);}
+@media(max-width:860px){.pads{grid-template-columns:repeat(2,1fr);gap:8px;padding:10px;}}
+.pad{
+  position:relative;min-height:150px;padding:16px 16px 18px;border-radius:8px;text-align:left;
+  background:linear-gradient(#34322c,#2b2924);color:var(--ink);
+  display:flex;flex-direction:column;justify-content:flex-end;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 3px 0 #15140f;
+  transition:transform .08s,background .2s,box-shadow .2s;
+}
+@media(max-width:600px){.pad{min-height:132px;padding:12px 12px 14px;}}
+.pad:hover{background:linear-gradient(#3d3a33,#322f29);}
+.pad.hit{transform:translateY(2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 1px 0 #15140f,0 0 40px color-mix(in srgb,var(--tc) 60%,transparent);background:color-mix(in srgb,var(--tc) 40%,#2b2924);}
+.pad::before{content:'';position:absolute;top:12px;right:12px;width:8px;height:8px;border-radius:50%;background:var(--tc);opacity:.6;transition:opacity .15s,box-shadow .15s;}
+.pad.hit::before{opacity:1;box-shadow:0 0 12px var(--tc);}
+.pad .note{position:absolute;top:10px;left:12px;font-family:var(--mono);font-size:9.5px;color:#8a8478;}
+.pad strong{display:block;font-family:var(--display);font-size:16.5px;font-weight:600;line-height:1.25;margin-bottom:4px;}
+.pad span.d{font-size:13px;line-height:1.45;color:#b9b2a5;}
+@media(max-width:600px){.pad strong{font-size:14.5px;}.pad span.d{font-size:12px;}}
+.pad.go{background:var(--orange);color:#fff;justify-content:space-between;}
+.pad.go::before{display:none;}
+.pad.go .note{color:rgba(255,255,255,.7);}
+.pad.go strong{font-size:20px;}
+.pad.go:hover{background:var(--orange2);}
+.pad.go .big-tri{width:0;height:0;border-left:30px solid #fff;border-top:19px solid transparent;border-bottom:19px solid transparent;margin-top:22px;}
+.get-note{margin-top:18px;font-family:var(--mono);font-size:11.5px;color:#7d7363;}
+
+/* ───────── COMMUNITY ───────── */
+.comm-wrap{display:grid;grid-template-columns:1fr 420px;gap:72px;align-items:center;}
+@media(max-width:900px){.comm-wrap{grid-template-columns:1fr;gap:40px;}}
+.comm-text p{font-size:16.5px;color:var(--muted);line-height:1.8;margin-bottom:16px;}
+.comm-text p strong{color:var(--ink);font-weight:600;}
+.chat{border:1px solid var(--line2);border-radius:14px;background:var(--panel);overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.45);}
+.chat-head{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line);background:#1e1e1c;}
+.tg{width:42px;height:42px;border-radius:50%;background:#229ED9;display:grid;place-items:center;flex:0 0 auto;}
+.tg svg{width:20px;height:20px;fill:#fff;margin-left:-2px;}
+.chat-title{font-family:var(--display);font-weight:600;font-size:16.5px;}
+.chat-sub{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px;}
+.chat-sub i{width:7px;height:7px;border-radius:50%;background:#22c55e;animation:blink 2s infinite;}
+.chat-body{padding:16px;display:flex;flex-direction:column;gap:10px;background:
+  radial-gradient(circle at 20% 0%,rgba(34,158,217,.07),transparent 60%),#171716;}
+.bubble{
+  max-width:92%;padding:12px 14px;border-radius:12px 12px 12px 4px;background:#24282c;
+  font-size:13.5px;line-height:1.55;color:var(--muted);
+  opacity:0;transform:translateY(12px) scale(.98);transition:opacity .5s,transform .5s cubic-bezier(.16,1,.3,1);
+}
+.bubble strong{display:block;color:var(--ink);font-weight:600;margin-bottom:2px;font-size:14px;}
+.bubble .em{margin-right:6px;}
+.chat.in .bubble{opacity:1;transform:none;}
+.chat.in .bubble:nth-child(2){transition-delay:.25s;}
+.chat.in .bubble:nth-child(3){transition-delay:.5s;}
+.chat.in .bubble:nth-child(4){transition-delay:.75s;}
+
+/* ───────── PRICING ───────── */
+.price-dev{border:1px solid var(--line2);border-radius:14px;background:var(--panel);overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.5);position:relative;}
+.price-dev::before{content:'';position:absolute;inset:-1px;border-radius:14px;padding:1px;background:linear-gradient(135deg,var(--orange),transparent 40%,transparent 60%,rgba(242,200,75,.6));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
+.pd-bar{display:flex;align-items:center;gap:10px;padding:10px 16px;background:#252522;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--ink);}
+.pd-bar .pwr{width:14px;height:14px;border-radius:50%;background:var(--orange);box-shadow:0 0 10px rgba(238,93,19,.8);}
+.pd-bar em{margin-left:auto;font-style:normal;color:var(--dim);}
+.pd-grid{display:grid;grid-template-columns:1.05fr 1fr;}
+@media(max-width:860px){.pd-grid{grid-template-columns:1fr;}}
+.pd-left{padding:40px;border-right:1px solid var(--line);background:linear-gradient(160deg,rgba(238,93,19,.09),transparent 55%);}
+.pd-right{padding:40px;}
+@media(max-width:600px){.pd-left,.pd-right{padding:26px 20px;}}
+@media(max-width:860px){.pd-left{border-right:0;border-bottom:1px solid var(--line);}}
+.founder-badge{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:linear-gradient(90deg,#F0A500,#e8861a);color:#1a0f00;padding:7px 14px;border-radius:100px;margin-bottom:22px;}
+.p-label{font-family:var(--display);font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);margin-bottom:10px;}
+.p-from{font-family:var(--display);font-size:17px;font-weight:600;color:#d0564a;text-decoration:line-through;margin-bottom:10px;}
+.p-inst{font-family:var(--display);font-size:clamp(44px,5vw,60px);font-weight:700;letter-spacing:-.035em;line-height:1;}
+.p-inst span{font-size:.48em;font-weight:500;letter-spacing:-.01em;color:var(--muted);}
+.p-or{font-family:var(--mono);font-size:11px;color:var(--dim);margin:16px 0 8px;letter-spacing:.1em;}
+.p-cash{font-family:var(--display);font-size:24px;font-weight:600;color:var(--orange);letter-spacing:-.01em;}
+.p-cash b{font-size:2em;font-weight:700;letter-spacing:-.03em;}
+.p-cash span{color:var(--ink);font-weight:400;font-size:.8em;}
+.vault{margin:28px 0;border:1px solid rgba(242,200,75,.35);border-radius:10px;background:rgba(242,200,75,.05);overflow:hidden;}
+.vault-head{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid rgba(242,200,75,.2);font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--c-yellow);text-transform:uppercase;}
+.vault li{list-style:none;display:flex;gap:10px;padding:11px 16px;font-size:14px;font-weight:500;color:var(--ink);border-bottom:1px solid rgba(242,200,75,.1);}
+.vault li:last-child{border-bottom:0;}
+.vault li::before{content:'★';color:var(--c-yellow);}
+.pd-cta .btn{width:100%;font-size:16px;padding:19px;}
+.pd-cta .btn-note{text-align:center;}
+.perk-title{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:10px;}
+.perks{list-style:none;}
+.perks li{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14.5px;line-height:1.5;color:var(--ink);}
+.perks li:last-child{border-bottom:0;}
+.perks li::before{content:'';flex:0 0 auto;width:16px;height:16px;margin-top:2px;border-radius:3px;background:var(--orange) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.6 2.5L12 5.5' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/100% no-repeat;}
+
+/* ───────── GUARANTEE / LOOP ───────── */
+.g-wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:64px;align-items:center;}
+@media(max-width:860px){.g-wrap{grid-template-columns:1fr;gap:36px;}}
+.loop{border:1px solid var(--line2);border-radius:10px;background:var(--panel);padding:16px 16px 20px;}
+.loop-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-family:var(--mono);font-size:10px;color:var(--dim);}
+.loop-top .lbtn{padding:3px 8px;border-radius:3px;background:var(--orange);color:#fff;font-weight:700;letter-spacing:.08em;}
+.loop-ruler{position:relative;display:grid;grid-template-columns:repeat(7,1fr);height:76px;}
+.loop-ruler div{border-left:1px solid var(--line2);font-family:var(--mono);font-size:10px;color:var(--muted);padding:4px 0 0 6px;}
+.loop-ruler div:last-child{border-right:1px solid var(--line2);}
+.loop-brace{position:absolute;left:0;right:0;top:24px;height:14px;background:var(--orange);border-radius:2px;transform-origin:left;transform:scaleX(0);transition:transform 1.4s cubic-bezier(.16,1,.3,1);}
+.loop.in .loop-brace{transform:scaleX(1);}
+.loop-brace::before,.loop-brace::after{content:'';position:absolute;top:0;bottom:-38px;width:2px;background:var(--orange);}
+.loop-brace::before{left:0;}.loop-brace::after{right:0;}
+.loop-head{position:absolute;top:24px;bottom:0;width:2px;left:0;background:var(--ink);opacity:0;}
+.loop.in .loop-head{opacity:1;animation:loophead 5s linear 1.4s infinite;}
+@keyframes loophead{from{left:0;}to{left:100%;}}
+.loop-days{display:flex;align-items:baseline;gap:12px;margin-top:6px;}
+.loop-days b{font-family:var(--display);font-size:64px;font-weight:700;line-height:1;color:var(--orange);letter-spacing:-.04em;}
+.loop-days span{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;}
+.g-text h3{font-family:var(--display);font-size:clamp(30px,3.6vw,44px);font-weight:600;letter-spacing:-.02em;line-height:1.08;margin-bottom:16px;}
+.g-text p{font-size:16.5px;color:var(--muted);line-height:1.75;max-width:480px;}
+.g-text p strong{color:var(--ink);}
+
+/* ───────── FAQ / BROWSER ───────── */
+.faq-wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:64px;align-items:start;}
+@media(max-width:860px){.faq-wrap{grid-template-columns:1fr;gap:20px;}}
+.browser{border:1px solid var(--cream-line);border-radius:12px;background:#f6f1e3;overflow:hidden;}
+.browser-bar{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--cream-line);font-family:var(--mono);font-size:10px;color:#8d8373;letter-spacing:.08em;text-transform:uppercase;}
+.browser details{border-bottom:1px solid var(--cream-line);}
+.browser details:last-child{border-bottom:0;}
+.browser summary{
+  list-style:none;cursor:pointer;display:flex;align-items:center;gap:14px;padding:18px 18px;
+  font-family:var(--display);font-size:17.5px;font-weight:500;color:var(--cream-ink);transition:background .15s;
+}
+.browser summary::-webkit-details-marker{display:none;}
+.browser summary:hover{background:#efe8d6;}
+.browser summary::before{
+  content:'';flex:0 0 auto;width:0;height:0;border-left:8px solid #8d8373;border-top:5px solid transparent;border-bottom:5px solid transparent;
+  transition:transform .2s;
+}
+.browser details[open] summary::before{transform:rotate(90deg);border-left-color:var(--orange);}
+.browser .ans{padding:0 18px 20px 40px;font-size:15px;color:var(--cream-muted);line-height:1.75;}
+.browser .ans strong{color:var(--cream-ink);}
+.yes{display:inline-block;font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:var(--orange);color:#fff;padding:3px 8px;border-radius:3px;margin-bottom:8px;}
+
+/* ───────── FINAL ───────── */
+.final{padding:140px 0 120px;overflow:hidden;border-bottom:0;}
+.final-bg{position:absolute;inset:0;display:grid;grid-template-columns:repeat(12,1fr);gap:6px;padding:6px;opacity:.13;pointer-events:none;
+  mask-image:radial-gradient(ellipse at 50% 60%,#000,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at 50% 60%,#000,transparent 70%);}
+.final-bg i{border-radius:3px;background:var(--tc);animation:cellpulse 4s ease-in-out infinite;animation-delay:var(--dl);}
+@keyframes cellpulse{0%,100%{opacity:.25;}50%{opacity:1;}}
+.final h2{position:relative;font-family:var(--display);font-size:clamp(48px,9vw,128px);font-weight:700;line-height:.98;letter-spacing:-.04em;margin-bottom:48px;}
+@media(max-width:600px){.final{padding:88px 0 80px;}.final h2{font-size:clamp(42px,13vw,66px);}}
+.final-row{position:relative;display:flex;align-items:center;gap:24px;flex-wrap:wrap;}
+@media(max-width:600px){.final-row{flex-direction:column;align-items:stretch;}.final-row .btn{width:100%;}}
+.final-note{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.04em;}
+
+/* ───────── STATUS BAR (footer) ───────── */
+footer{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:12px 20px;background:#151514;border-top:1px solid var(--line);font-family:var(--mono);font-size:10.5px;color:var(--dim);letter-spacing:.04em;}
+footer .ok{display:flex;align-items:center;gap:8px;}
+footer .ok i{width:7px;height:7px;border-radius:50%;background:var(--play);}
+@media(max-width:600px){footer{flex-direction:column;text-align:center;padding:18px 16px;}}
+
+/* ───────── COMPUTER MIDI KEYBOARD ───────── */
+.keys-pop{
+  position:fixed;left:50%;bottom:14px;z-index:95;transform:translate(-50%,140%);
+  background:#1c1c1a;border:1px solid var(--line2);border-radius:12px;padding:10px 12px 12px;
+  box-shadow:0 20px 60px rgba(0,0,0,.6);transition:transform .35s cubic-bezier(.16,1,.3,1);
+  max-width:calc(100vw - 24px);
+}
+.keys-pop.open{transform:translate(-50%,0);}
+.keys-top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:8px;font-family:var(--mono);font-size:10px;color:var(--dim);}
+.keys-top b{color:var(--ink);}
+.keys-top button{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;background:var(--panel3);color:var(--muted);}
+.piano{position:relative;display:flex;height:96px;touch-action:none;}
+.wk{width:40px;height:96px;background:linear-gradient(#f4efe4,#ddd6c7);border:1px solid #0e0e0d;border-radius:0 0 5px 5px;position:relative;display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;font-family:var(--mono);font-size:9px;color:#8a8478;}
+.wk.down{background:linear-gradient(#f9b48c,var(--orange));color:#fff;}
+.bk{position:absolute;top:0;width:26px;height:58px;background:linear-gradient(#2c2c28,#0d0d0c);border-radius:0 0 4px 4px;z-index:2;display:flex;align-items:flex-end;justify-content:center;padding-bottom:5px;font-family:var(--mono);font-size:8px;color:#7a756c;}
+.bk.down{background:linear-gradient(#ff8a4c,#b8440a);color:#fff;}
+@media(max-width:560px){.wk{width:calc((100vw - 52px)/10);}.bk{width:calc((100vw - 52px)/16);}}
+
+/* toast */
+.toast{position:fixed;left:50%;top:calc(var(--tbar) + 12px);transform:translate(-50%,-20px);opacity:0;z-index:120;
+  background:var(--ink);color:#111;font-size:13px;font-weight:600;padding:9px 16px;border-radius:7px;pointer-events:none;transition:all .3s;white-space:nowrap;}
+.toast.show{opacity:1;transform:translate(-50%,0);}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}
+  .reveal,.split .line>span,.bubble{opacity:1 !important;transform:none !important;}
+  .ticker-track{animation:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═════════ TRANSPORT ═════════ -->
+<header class="transport" id="transport">
+  <a href="#top" class="brand" data-info="Ableton Express|Curso de Ableton Live feito pro tecladista de igreja. Você está dentro de um set agora."><span class="brand-mark" aria-hidden="true"></span><span class="brand-text">Ableton Express</span></a>
+  <div class="t-group" role="group" aria-label="Transporte">
+    <button class="t-btn play" id="tPlay" aria-label="Play" data-info="Play|Toca o set lá do topo (clique de novo pra parar). Atalho: barra de espaço."><svg viewBox="0 0 14 14"><path d="M3 1.5v11l9-5.5z"/></svg></button>
+    <button class="t-btn" id="tStop" aria-label="Stop" data-info="Stop|Para tudo. Apertar duas vezes no Live volta pro começo."><svg viewBox="0 0 14 14"><rect x="2.5" y="2.5" width="9" height="9" rx="1"/></svg></button>
+  </div>
+  <div class="t-field t-bpm mono" id="tBpm" role="slider" aria-label="Andamento" aria-valuemin="50" aria-valuemax="160" aria-valuenow="72" tabindex="0" data-info="Tempo|Arraste pra cima/baixo pra mudar o BPM, ou clique no ritmo pra usar como Tap Tempo."><span id="bpmVal">72.00</span><small>BPM</small></div>
+  <div class="t-field t-sig mono" data-info="Fórmula de compasso|4/4. O básico de quase todo louvor.">4 / 4</div>
+  <div class="t-metro-wrap"><button class="t-btn metro" id="tMetro" aria-label="Metrônomo" aria-pressed="false" data-info="Metrônomo|Liga o click. No palco ele vai só pro seu fone, nunca pro PA."><svg viewBox="0 0 14 14" style="fill:none;stroke:currentColor;stroke-width:1.3;stroke-linejoin:round"><path d="M4.6 1.5h4.8l2.6 11H2z"/><path d="M7 10L10.6 3.2"/></svg></button></div>
+  <div class="t-field t-pos mono" id="tPos" data-info="Posição|Compasso . tempo . semicolcheia. Rola a página e veja o set andar.">1. 1. 1</div>
+  <div class="t-kbd-wrap"><button class="t-btn kbd" id="tKbd" aria-label="Teclado MIDI do computador" aria-pressed="false" data-info="Teclado MIDI do computador|Transforma seu teclado em piano: A S D F G H J K. Atalho: M."><svg viewBox="0 0 14 14"><rect x="1" y="3.5" width="12" height="7" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.3"/><rect x="3" y="5.5" width="1.4" height="1.4"/><rect x="5.3" y="5.5" width="1.4" height="1.4"/><rect x="7.6" y="5.5" width="1.4" height="1.4"/><rect x="9.9" y="5.5" width="1.2" height="1.4"/><rect x="4" y="8" width="6" height="1.2"/></svg></button></div>
+  <div class="t-spacer"></div>
+  <div class="t-cpu" data-info="CPU Load|Quanto o set está pesando. Spoiler: no curso você aprende a deixar isso baixo no culto."><span>CPU</span><span class="t-cpu-bar"><i id="cpuBar"></i></span><span id="cpuVal">3%</span></div>
+  <a href="https://pay.kiwify.com.br/y1KK52S" class="t-cta magnetic" data-info="Quero entrar|Vai direto pro checkout seguro da Kiwify.">Quero entrar</a>
+  <span class="scroll-head" id="scrollHead"></span>
+</header>
+
+<!-- SCENE RAIL -->
+<nav class="scene-rail" id="sceneRail" aria-label="Cenas"></nav>
+
+<!-- INFO VIEW -->
+<aside class="info-view hidden" id="infoView" aria-hidden="true">
+  <button class="info-close" id="infoClose" aria-label="Fechar Info View">×</button>
+  <h4 id="infoTitle">Info View</h4>
+  <p id="infoText">Passe o mouse sobre qualquer coisa nesta página. Igual no Live, aqui embaixo aparece o que ela faz.</p>
+  <span class="info-tag">? Info View</span>
+</aside>
+
+<main id="top">
+
+<!-- ═════════ 1 · HERO ═════════ -->
+<section class="hero" data-scene="Intro" id="intro">
+  <div class="hero-grid-bg" aria-hidden="true"></div>
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="container hero-wrap">
+    <div>
+      <span class="hero-tag reveal"><i></i>Ableton Live ao vivo · para tecladistas de igreja</span>
+      <h1 class="split">Você sabe<br>tocar. Agora<br>aprenda a <span class="hl">comandar.</span></h1>
+      <p class="hero-sub reveal d2"><strong>Ableton Express</strong> é o curso que ensina o tecladista de igreja a montar, do zero, um setup completo de timbres, playback e click, sem depender de template de ninguém.</p>
+      <div class="hero-cta reveal d3">
+        <a href="https://pay.kiwify.com.br/y1KK52S" class="btn magnetic" data-info="Começar agora|Acesso imediato depois da compra. Garantia de 7 dias.">Começar agora <span class="tri"></span></a>
+      </div>
+      <div class="hero-by reveal d4">com <b>Tiago Silva</b><span class="sig">10 anos de Ableton no palco</span></div>
+    </div>
+
+    <div class="session reveal d2" id="session" data-info="Session View|Isso aqui toca de verdade. Clique num clipe pra disparar, ou numa cena (coluna da direita) pra disparar a linha inteira. Entra sempre no próximo compasso, igual no Live.">
+      <div class="s-top">
+        <div class="s-tabs"><span class="on">Session</span><span>Arrangement</span></div>
+        <span class="s-file"><b>Culto de Domingo.als</b> · Sol maior</span>
+      </div>
+      <div class="s-grid" id="sGrid"></div>
+      <div class="s-mixer" id="sMixer"></div>
+      <div class="s-foot"><span><span class="key">Quantização:</span> 1 compasso</span><span class="hide-m">Fone recomendado 🎧</span><span><span class="key">Espaço</span> play/stop</span></div>
+      <div class="s-hint" id="sHint">▶ Clique num clipe. Sim, toca. <kbd>espaço</kbd></div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
+
+<!-- ═════════ 2 · PROBLEMA ═════════ -->
+<section class="sec" data-scene="O problema" id="problema">
+  <div class="container">
+    <div class="scene-label"><b>Cena 02</b> O problema</div>
+    <h2 class="h-big split">O papel do tecladista mudou.<br><span class="hl">E ninguém te ensinou</span><br>a parte de trás do palco.</h2>
+    <p class="problem-intro reveal">Hoje você não toca só teclado. Você dispara playback, organiza click, troca timbre no meio da música e ainda precisa resolver quando algo trava. E quando o Ableton vira um bicho de sete cabeças, a culpa nunca é sua.</p>
+
+    <div class="xf-panel reveal d1" data-info="Crossfader|Arraste de A pra B. É exatamente essa a transição que o curso faz com você.">
+      <div class="xf-cols">
+        <div class="xf-col a" id="xfA">
+          <p class="xf-label"><span class="ab">A</span>Sem dominar o Ableton</p>
+          <ul class="xf-list">
+            <li>Horas perdidas copiando tutorial do YouTube sem entender o porquê</li>
+            <li>Depende de template de outra pessoa e trava quando precisa mudar algo</li>
+            <li>Sobe no palco com medo de travar o playback no meio do louvor</li>
+            <li>Toca preocupado com o notebook, em vez de focado na ministração</li>
+          </ul>
+        </div>
+        <div class="xf-col b" id="xfB">
+          <p class="xf-label"><span class="ab">B</span>Dominando o Ableton</p>
+          <ul class="xf-list">
+            <li>Monta qualquer setup do zero, do jeito que a sua igreja precisa</li>
+            <li>Cria seus próprios Instrument Racks, macros e templates</li>
+            <li>Resolve qualquer imprevisto sozinho, em segundos, sem pânico</li>
+            <li>Toca com liberdade e a cabeça 100% na ministração</li>
+          </ul>
+        </div>
+      </div>
+      <div class="xf-bar">
+        <span class="lbl">A</span>
+        <input type="range" class="xf" id="xf" min="0" max="100" value="12" aria-label="Crossfader de A (sem dominar) para B (dominando)">
+        <span class="lbl" style="color:var(--orange)">B</span>
+        <span class="cap">Crossfader</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ 3 · PRA QUEM ═════════ -->
+<section class="sec light" data-scene="Pra quem é" id="pra-quem">
+  <div class="container">
+    <div class="scene-label"><b>Cena 03</b> Pra quem é</div>
+    <div class="for-grid">
+      <div>
+        <h2 class="h-big split" style="margin-bottom:28px">Este curso<br>é pra <span class="hl">você?</span></h2>
+        <div class="for-story reveal">
+          <p>Você toca todo domingo, conhece as músicas e os arranjos. Mas quando precisa mexer no setup, trava. Depende do template de alguém, de tutoriais ou daquele amigo que entende de Ableton. E quando algo dá errado no culto, <strong>sua atenção sai da ministração e vai para o computador.</strong> Se você já viveu isso, o Ableton Express foi feito para você!</p>
+        </div>
+      </div>
+      <div class="reveal d2">
+        <div class="arm-panel" data-info="Record Arm|No Live você arma a faixa antes de gravar. Aqui, arme tudo que é a sua realidade hoje.">
+          <div class="arm-head"><span>Arme o que é a sua realidade</span><span id="armCount">0 / 4</span></div>
+          <ul class="arm-list">
+            <li><button class="arm-row" aria-pressed="false"><span class="arm-dot"></span>Nunca abriu o Ableton e não sabe por onde começar</button></li>
+            <li><button class="arm-row" aria-pressed="false"><span class="arm-dot"></span>Quer rodar playback e click com segurança na igreja</button></li>
+            <li><button class="arm-row" aria-pressed="false"><span class="arm-dot"></span>Quer criar seus próprios timbres, racks e templates</button></li>
+            <li><button class="arm-row" aria-pressed="false"><span class="arm-dot"></span>Cansou de depender dos outros pra resolver qualquer ajuste</button></li>
+          </ul>
+          <div class="arm-result" id="armResult"><span class="rec"></span><span id="armMsg">Nenhuma faixa armada ainda.</span></div>
+        </div>
+        <p class="for-not">Não é pra quem busca atalho ou só quer baixar template pronto.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ 4 · MÓDULOS ═════════ -->
+<section class="sec" data-scene="Módulos" id="modulos">
+  <div class="container">
+    <div class="scene-label"><b>Cena 04</b> O que você vai aprender</div>
+    <div class="shot reveal">
+      <div class="shot-bar"><i></i><i></i><i></i><span>Ableton Express · aula em andamento</span></div>
+      <img src="https://tialeqs.com.br/wp-content/uploads/2026/07/placeholder-ableton.png" alt="Ableton Live em ação" loading="lazy">
+    </div>
+    <h2 class="h-big split">O que você<br>vai <span class="hl">aprender.</span></h2>
+
+    <div class="arr-overview" id="arrOverview" aria-hidden="true">
+      <div class="arr-ruler"><span>1</span><span>5</span><span>9</span><span>13</span><span>17</span><span>21</span><span>25</span><span>29</span></div>
+      <div class="arr-strip" id="arrStrip">
+        <i style="--tc:var(--c-orange)"></i><i style="--tc:var(--c-purple)"></i><i style="--tc:var(--c-blue)"></i><i style="--tc:var(--c-yellow)"></i><i style="--tc:var(--c-cyan)"></i><i style="--tc:var(--c-pink)"></i><i class="new"></i>
+        <span class="arr-play" id="arrPlay"></span>
+      </div>
+    </div>
+
+    <div id="arrTracks">
+      <article class="arr-track reveal" style="--tc:var(--c-orange)">
+        <div class="arr-head"><span class="arr-num">01</span><div class="arr-btns"><span>▶</span><span>S</span><span>●</span></div></div>
+        <div class="arr-lane"><div class="arr-clip"><div class="arr-clip-bar">01 · Primeiros passos</div><svg class="arr-notes"></svg>
+          <div class="arr-body"><h3>Primeiros passos</h3>
+            <p>Interface completa do Ableton, configuração inicial e orientação para quem começa do absoluto zero.</p>
+            <div class="devs"><span>Bem-vindo</span><span>Por onde começar</span><span>O que é o Ableton</span><span>Configuração inicial</span></div>
+          </div></div></div>
+      </article>
+      <article class="arr-track reveal" style="--tc:var(--c-purple)">
+        <div class="arr-head"><span class="arr-num">02</span><div class="arr-btns"><span>▶</span><span>S</span><span>●</span></div></div>
+        <div class="arr-lane"><div class="arr-clip"><div class="arr-clip-bar">02 · Construindo seu instrumento</div><svg class="arr-notes"></svg>
+          <div class="arr-body"><h3>Construindo seu instrumento</h3>
+            <p>Montagem do projeto do zero ao setup completo, incluindo Split e Dual Zones para quem toca com múltiplos timbres.</p>
+            <div class="devs"><span>Montando o projeto</span><span>Split e Dual Zones</span></div>
+          </div></div></div>
+      </article>
+      <article class="arr-track reveal" style="--tc:var(--c-blue)">
+        <div class="arr-head"><span class="arr-num">03</span><div class="arr-btns"><span>▶</span><span>S</span><span>●</span></div></div>
+        <div class="arr-lane"><div class="arr-clip"><div class="arr-clip-bar">03 · Recursos que fazem a diferença</div><svg class="arr-notes"></svg>
+          <div class="arr-body"><h3>Recursos que fazem a diferença</h3>
+            <p>Os recursos que separam um setup amador de um setup profissional: master, drone, plugins e efeitos.</p>
+            <div class="devs"><span>Processando o master</span><span>Drone / pad contínuo</span><span>Plugins gratuitos</span><span>Efeitos no Drum Pad</span><span>Dispositivo agregado</span></div>
+          </div></div></div>
+      </article>
+      <article class="arr-track reveal" style="--tc:var(--c-yellow)">
+        <div class="arr-head"><span class="arr-num">04</span><div class="arr-btns"><span>▶</span><span>S</span><span>●</span></div></div>
+        <div class="arr-lane"><div class="arr-clip"><div class="arr-clip-bar">04 · Click e Playback</div><svg class="arr-notes"></svg>
+          <div class="arr-body"><h3>Click e Playback</h3>
+            <p>Integração completa de click e VS no Ableton, do modo simples ao complexo, com click global para emergências.</p>
+            <div class="devs"><span>Integrando Click e VS</span><span>Modo complexo</span><span>Click global</span></div>
+          </div></div></div>
+      </article>
+      <article class="arr-track reveal" style="--tc:var(--c-cyan)">
+        <div class="arr-head"><span class="arr-num">05</span><div class="arr-btns"><span>▶</span><span>S</span><span>●</span></div></div>
+        <div class="arr-lane"><div class="arr-clip"><div class="arr-clip-bar">05 · Finalizando seu setup</div><svg class="arr-notes"></svg>
+          <div class="arr-body"><h3>Finalizando seu setup</h3>
+            <p>Revisão completa, template universal, mapeamentos MIDI e como gravar no Ableton.</p>
+            <div class="devs"><span>Template universal</span><span>Mapeamentos MIDI</span><span>Como gravar</span></div>
+          </div></div></div>
+      </article>
+      <article class="arr-track reveal" style="--tc:var(--c-pink)">
+        <div class="arr-head"><span class="arr-num">06</span><div class="arr-btns"><span>▶</span><span>S</span><span>●</span></div></div>
+        <div class="arr-lane"><div class="arr-clip"><div class="arr-clip-bar">06 · Templates e setup real <span class="gift">🎁 Presente incluso</span></div><svg class="arr-notes"></svg>
+          <div class="arr-body"><h3>Templates e setup real</h3>
+            <p>Você recebe o <strong>Template Base Worship de presente</strong>, pronto pra você baixar e customizar do seu jeito pra usar na sua igreja. Além disso, tour completo pelos templates DROPS e Lite Keys e pelo setup real do instrutor.</p>
+            <div class="devs"><span>🎁 Template Base Worship (download)</span><span>Tour pelo template DROPS/Paulo Vicente</span><span>Tour pelo Template Lite Keys</span><span>Tour pelo setup</span></div>
+          </div></div></div>
+      </article>
+    </div>
+    <div class="arr-drop reveal" data-info="Arraste arquivos e dispositivos aqui|Do jeito que aparece numa faixa vazia do Live. Só que aqui quem arrasta conteúdo novo sou eu.">
+      <span class="plus">+</span>
+      <p><strong>Novos módulos e aulas a caminho.</strong>O curso está em constante expansão, alunos recebem todo o conteúdo novo sem custo adicional.<em>ARRASTE NOVOS MÓDULOS AQUI</em></p>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ 5 · ALUNOS ═════════ -->
+<section class="sec social" data-scene="Alunos" id="alunos">
+  <div class="container">
+    <div class="scene-label"><b>Cena 05</b> Quem já entrou</div>
+    <h2 class="h-big split">Quem entrou já está<br><span class="hl">usando de verdade.</span></h2>
+    <p class="social-intro reveal">Mensagens reais que chegaram de alunos do Ableton Express.</p>
+    <div class="social-grid reveal d1">
+      <button class="proof" style="--tc:var(--c-orange)" data-full="assets/depoimentos/depoimento-01.jpg"><div class="proof-bar">depoimento_01 <em>aluno</em></div><div class="proof-img"><img src="assets/depoimentos/depoimento-01.jpg" alt="Mensagem de aluno do Ableton Express" loading="lazy"></div></button>
+      <button class="proof" style="--tc:var(--c-purple)" data-full="assets/depoimentos/depoimento-02.jpg"><div class="proof-bar">depoimento_02 <em>aluno</em></div><div class="proof-img"><img src="assets/depoimentos/depoimento-02.jpg" alt="Mensagem de aluno do Ableton Express" loading="lazy"></div></button>
+      <button class="proof" style="--tc:var(--c-cyan)" data-full="assets/depoimentos/depoimento-03.jpg"><div class="proof-bar">depoimento_03 <em>aluno</em></div><div class="proof-img"><img src="assets/depoimentos/depoimento-03.jpg" alt="Mensagem de aluno do Ableton Express" loading="lazy"></div></button>
+      <button class="proof" style="--tc:var(--c-yellow)" data-full="assets/depoimentos/depoimento-04.jpg"><div class="proof-bar">depoimento_04 <em>aluno</em></div><div class="proof-img"><img src="assets/depoimentos/depoimento-04.jpg" alt="Mensagem de aluno do Ableton Express" loading="lazy"></div></button>
+    </div>
+    <p class="social-hint">Arraste para o lado →</p>
+  </div>
+</section>
+<dialog class="lightbox" id="lightbox"><img id="lbImg" alt="Depoimento ampliado"><button class="lb-close" id="lbClose" aria-label="Fechar">×</button></dialog>
+
+<!-- ═════════ 6 · INSTRUTOR ═════════ -->
+<section class="sec" data-scene="Instrutor" id="instrutor">
+  <div class="container">
+    <div class="scene-label"><b>Cena 06</b> Quem vai te ensinar</div>
+    <div class="founder-wrap">
+      <div class="founder-body">
+        <h2 class="founder-quote split">“Em 2017 eu também comecei do zero. Numa época em que<br><span class="hl">não existia conteúdo sobre Ableton em português.”</span></h2>
+        <p class="reveal">Passei anos testando configuração por configuração, aprendendo na prática, em ensaio e em culto. Depois de quase uma década rodando Ableton ao vivo em igreja, reuni exatamente o que faz diferença pra quem toca.</p>
+        <p class="reveal">Sem enrolação. Sem recurso desnecessário. <strong>Apenas o que você realmente precisa dominar para tocar com confiança.</strong></p>
+        <p class="reveal">Você não precisa virar produtor musical. Não precisa aprender mixagem nem masterização. Só precisa dominar as ferramentas que realmente importam pra quem toca ao vivo.</p>
+
+        <p class="traj-title">Trajetória · automação</p>
+        <ol class="traj" id="traj" data-info="Automação|Cada ponto é um breakpoint da minha história. A linha vai acendendo conforme você rola.">
+          <span class="traj-fill" id="trajFill"></span>
+          <li><span class="when">9 anos</span><p>Comecei a tocar teclado com 9 anos dentro da igreja.</p></li>
+          <li><span class="when">16 anos · estrada</span><p>Desde os 16 viajo ministrando com banda. Ao longo do caminho, o lado musical e o lado técnico foram crescendo juntos, um complementando o outro.</p></li>
+          <li><span class="when">DROPS</span><p>Fiz parte do <strong>DROPS</strong>, onde atuei como tecladista e na produção musical e de áudio. A banda alcançou milhões de streams, especialmente com a canção <em>“É Ele”</em>, que eu arranjei, produzi, mixei e masterizei.</p></li>
+          <li><span class="when">5 anos · igreja local</span><p>Durante 5 anos contribuí para a construção da identidade sonora da minha igreja local, cuidando da produção de todos os projetos musicais e da mixagem das transmissões ao vivo. Essa experiência me deu uma sensibilidade que vai do palco à mesa de som.</p></li>
+          <li><span class="when">Bethel Music</span><p>Estudei com profissionais da <strong>Bethel Music</strong> através da plataforma online, aprofundando técnica, performance e produção.</p></li>
+          <li><span class="when">2021 →</span><p>Desde 2021 tenho trabalhos publicados como produtor, mixer e master em projetos externos e de igreja.</p></li>
+          <li><span class="when">Lite Keys</span><p>Criador do <strong>Lite Keys</strong>, template para Ableton Live que já é utilizado por tecladistas no Brasil e no mundo desde seu lançamento.</p></li>
+        </ol>
+      </div>
+
+      <div class="founder-side reveal d2">
+        <div class="photo-frame"><img src="https://tialeqs.com.br/wp-content/uploads/2026/07/placeholder-vertical.png" alt="Tiago Silva" loading="lazy"></div>
+        <div class="rack" id="rack" data-info="Instrument Rack|Quatro macros, um instrutor. No curso você aprende a montar os seus.">
+          <div class="rack-bar"><span class="pwr"></span>Tiago Silva Rack<em>Macros</em></div>
+          <div class="rack-id">
+            <p class="rack-name">TIAGO SILVA</p>
+            <p class="rack-role">Músico, produtor musical, engenheiro de mixagem e masterização, criador do “LITE KEYS” e instrutor</p>
+          </div>
+          <div class="knobs">
+            <div class="knob" data-v="10" data-max="12" data-pre=""><svg viewBox="0 0 78 78"><path class="trk" d="M16.4 61.6 A32 32 0 1 1 61.6 61.6"/><path class="val-arc" d="M16.4 61.6 A32 32 0 1 1 61.6 61.6"/><circle class="cap" cx="39" cy="39" r="21"/><line class="ptr" x1="39" y1="39" x2="39" y2="24"/></svg><span class="num">0</span><span class="lbl">anos de Ableton ao vivo</span></div>
+            <div class="knob" data-v="6" data-max="6" data-pre=""><svg viewBox="0 0 78 78"><path class="trk" d="M16.4 61.6 A32 32 0 1 1 61.6 61.6"/><path class="val-arc" d="M16.4 61.6 A32 32 0 1 1 61.6 61.6"/><circle class="cap" cx="39" cy="39" r="21"/><line class="ptr" x1="39" y1="39" x2="39" y2="24"/></svg><span class="num">0</span><span class="lbl">módulos completos</span></div>
+            <div class="knob" data-v="20" data-max="26" data-pre="+"><svg viewBox="0 0 78 78"><path class="trk" d="M16.4 61.6 A32 32 0 1 1 61.6 61.6"/><path class="val-arc" d="M16.4 61.6 A32 32 0 1 1 61.6 61.6"/><circle class="cap" cx="39" cy="39" r="21"/><line class="ptr" x1="39" y1="39" x2="39" y2="24"/></svg><span class="num">0</span><span class="lbl">aulas gravadas</span></div>
+            <div class="knob" data-v="4" data-max="6" data-pre="+"><svg viewBox="0 0 78 78"><path class="trk" d="M16.4 61.6 A32 32 0 1 1 61.6 61.6"/><path class="val-arc" d="M16.4 61.6 A32 32 0 1 1 61.6 61.6"/><circle class="cap" cx="39" cy="39" r="21"/><line class="ptr" x1="39" y1="39" x2="39" y2="24"/></svg><span class="num">0</span><span class="lbl">horas de conteúdo</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ 7 · CONTEÚDO ═════════ -->
+<section class="sec light" data-scene="Conteúdo" id="conteudo">
+  <div class="container">
+    <div class="scene-label"><b>Cena 07</b> O que vem junto</div>
+    <h2 class="h-big split">Tudo pra montar seu<br><span class="hl">setup do zero.</span></h2>
+    <p class="rack-hint reveal"><i></i>Isso é um Drum Rack. Toque nos pads 🔊</p>
+    <div class="pads reveal d1" id="pads" data-info="Drum Rack|Cada pad é uma coisa que você recebe. E cada um tem um som. Vai, toca.">
+      <button class="pad" style="--tc:var(--c-orange)" data-snd="kick"><span class="note">C1</span><strong>Aulas gravadas</strong><span class="d">Passo a passo, no seu ritmo</span></button>
+      <button class="pad" style="--tc:var(--c-purple)" data-snd="rim"><span class="note">C#1</span><strong>Projeto junto</strong><span class="d">Construído com você durante o curso</span></button>
+      <button class="pad" style="--tc:var(--c-blue)" data-snd="snare"><span class="note">D1</span><strong>Routing completo</strong><span class="d">Entradas e saídas explicadas a fundo</span></button>
+      <button class="pad" style="--tc:var(--c-yellow)" data-snd="clap"><span class="note">D#1</span><strong>Seu próprio template</strong><span class="d">Você cria, não apenas baixa</span></button>
+      <button class="pad" style="--tc:var(--c-cyan)" data-snd="hat"><span class="note">E1</span><strong>Click e Multitracks</strong><span class="d">Integração real pra tocar ao vivo</span></button>
+      <button class="pad" style="--tc:var(--c-pink)" data-snd="tomL"><span class="note">F1</span><strong>Mapeamentos MIDI</strong><span class="d">Controle tudo do seu teclado</span></button>
+      <button class="pad" style="--tc:var(--c-orange)" data-snd="ohat"><span class="note">F#1</span><strong>Atualizações futuras</strong><span class="d">Novas aulas e módulos a caminho, incluídos sem custo adicional</span></button>
+      <button class="pad" style="--tc:var(--c-purple)" data-snd="tomH"><span class="note">G1</span><strong>Acesso vitalício</strong><span class="d">Assista quando e quantas vezes quiser</span></button>
+      <button class="pad" style="--tc:var(--c-blue)" data-snd="bell"><span class="note">G#1</span><strong>🎁 Template Base Worship</strong><span class="d">Download imediato, presente do instrutor</span></button>
+      <button class="pad" style="--tc:var(--c-yellow)" data-snd="cow"><span class="note">A1</span><strong>📚 Manual definitivo</strong><span class="d">Manual de Ableton para tecladistas de igreja</span></button>
+      <button class="pad" style="--tc:var(--c-cyan)" data-snd="crash"><span class="note">A#1</span><strong>🆘 Ableton S.O.S</strong><span class="d">Ferramenta pra resolver problemas na hora com checklists práticos</span></button>
+      <a class="pad go magnetic" href="https://pay.kiwify.com.br/y1KK52S" data-info="Quero começar agora|Esse pad não toca som: ele te leva pro checkout."><span class="note">B1</span><span class="big-tri"></span><strong>Quero começar agora</strong></a>
+    </div>
+    <p class="get-note reveal">Acesso imediato após a compra</p>
+  </div>
+</section>
+
+<!-- ═════════ 8 · COMUNIDADE ═════════ -->
+<section class="sec" data-scene="Comunidade" id="comunidade">
+  <div class="container">
+    <div class="scene-label"><b>Cena 08</b> Comunidade</div>
+    <div class="comm-wrap">
+      <div class="comm-text">
+        <h2 class="h-big split" style="margin-bottom:28px">Você não vai<br>crescer <span class="hl">sozinho.</span></h2>
+        <p class="reveal">A maioria dos tecladistas de igreja é o único da congregação fazendo isso. Não tem com quem tirar dúvida, comparar setup ou celebrar quando algo finalmente funciona.</p>
+        <p class="reveal"><strong>Quem entra no Ableton Express entra também numa comunidade de músicos que estão no mesmo caminho.</strong> Um grupo no Telegram exclusivo para alunos, onde a gente cresce junto.</p>
+        <p class="reveal">Você vai ter acesso direto a mim pra tirar dúvidas, receber updates em primeira mão e fazer parte de uma comunidade de tecladistas que levam o que fazem a sério.</p>
+      </div>
+      <div class="chat" id="chat">
+        <div class="chat-head">
+          <div class="tg"><svg viewBox="0 0 24 24"><path d="M21.5 3.6L2.9 10.8c-1.3.5-1.2 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.7.4.9.9.9.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.7c.3-1.3-.5-1.9-1.4-1.5zM8.6 13.4l9.5-6c.4-.3.8-.1.5.2l-7.9 7.2-.3 3.3-1.8-4.7z"/></svg></div>
+          <div><p class="chat-title">Comunidade Ableton Express</p><p class="chat-sub"><i></i>Grupo exclusivo no Telegram</p></div>
+        </div>
+        <div class="chat-body">
+          <div class="bubble"><strong><span class="em">💬</span>Tire suas dúvidas</strong>Travou em alguma configuração? Pergunta no grupo. Eu respondo pessoalmente.</div>
+          <div class="bubble"><strong><span class="em">🔔</span>Updates em primeira mão</strong>Novas aulas, novos módulos e conteúdos exclusivos chegam aqui antes de qualquer lugar.</div>
+          <div class="bubble"><strong><span class="em">🎤</span>Comunidade real</strong>Tecladistas de igrejas de todo Brasil compartilhando setups, aprendizados e evolução.</div>
+          <div class="bubble"><strong><span class="em">🎯</span>Acesso ao instrutor</strong>Estou presente e crescendo junto com você.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ 9 · INVESTIMENTO ═════════ -->
+<section class="sec" data-scene="Investimento" id="investimento">
+  <div class="container">
+    <div class="scene-label"><b>Cena 09</b> Investimento</div>
+    <h2 class="h-big split">Investimento<span class="hl">.</span></h2>
+    <div class="price-dev reveal">
+      <div class="pd-bar"><span class="pwr"></span>Ableton Express · Turma Fundadora<em>v1.0</em></div>
+      <div class="pd-grid">
+        <div class="pd-left">
+          <div class="founder-badge">★ Turma Fundadora</div>
+          <p class="p-label">Ableton Express</p>
+          <p class="p-from">Preço oficial: R$297,00</p>
+          <div class="p-inst"><span>12x de </span>R$10,03</div>
+          <p class="p-or">OU</p>
+          <div class="p-cash">R$<b>97</b><span>,00 à vista</span></div>
+          <div class="vault">
+            <div class="vault-head">🔒 Cofre do Ableton Express</div>
+            <ul>
+              <li>Masterclass: O papel do tecladista na ministração</li>
+              <li>Masterclass: Como gravar suas Keyscams</li>
+            </ul>
+          </div>
+          <div class="pd-cta">
+            <a href="https://pay.kiwify.com.br/y1KK52S" class="btn magnetic" data-info="Entrar na Turma Fundadora|Checkout seguro na Kiwify. Garantia incondicional de 7 dias.">Entrar na Turma Fundadora <span class="tri"></span></a>
+            <p class="btn-note">Acesso imediato · Garantia de 7 dias · Vitalício</p>
+          </div>
+        </div>
+        <div class="pd-right">
+          <p class="perk-title">Tudo que está incluso</p>
+          <ul class="perks">
+            <li>Mais de +20 aulas gravadas passo a passo</li>
+            <li>Projeto construído junto com você</li>
+            <li>Routing, racks e playback explicados</li>
+            <li>Mapeamentos MIDI e templates reais</li>
+            <li>🎁 Template Base Worship de presente</li>
+            <li>📚 Manual definitivo de Ableton para tecladistas de igreja</li>
+            <li>🆘 Ableton S.O.S — resolva problemas na hora</li>
+            <li>Novos módulos a caminho, incluídos sem custo</li>
+            <li>Comunidade exclusiva no Telegram</li>
+            <li>Acesso vitalício</li>
+            <li>Atualizações futuras incluídas</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ 10 · GARANTIA ═════════ -->
+<section class="sec" data-scene="Garantia" id="garantia">
+  <div class="container">
+    <div class="scene-label"><b>Cena 10</b> Garantia</div>
+    <div class="g-wrap">
+      <div class="g-text reveal">
+        <h3>Garantia incondicional.<br><span class="hl">O risco é todo meu.</span></h3>
+        <p>Acesse, assista às aulas e comece a aplicar. Se não for pra você, basta pedir o reembolso dentro de 7 dias. <strong>Sem perguntas.</strong> O risco é todo meu.</p>
+      </div>
+      <div class="loop reveal d1" id="loop" data-info="Loop|7 dias em loop. Assista, teste, aplique. Não curtiu? Reembolso, sem perguntas.">
+        <div class="loop-top"><span>LOOP</span><span class="lbtn">ON</span></div>
+        <div class="loop-ruler">
+          <div>D1</div><div>D2</div><div>D3</div><div>D4</div><div>D5</div><div>D6</div><div>D7</div>
+          <span class="loop-brace"></span><span class="loop-head"></span>
+        </div>
+        <div class="loop-days"><b>7</b><span>dias de garantia</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ 11 · FAQ ═════════ -->
+<section class="sec light" data-scene="Dúvidas" id="duvidas">
+  <div class="container">
+    <div class="scene-label"><b>Cena 11</b> Dúvidas</div>
+    <div class="faq-wrap">
+      <h2 class="h-big split">Dúvidas<br><span class="hl">frequentes.</span></h2>
+      <div class="browser reveal d1" data-info="Browser|Abra as pastas. As respostas estão aí dentro.">
+        <div class="browser-bar">▾ Browser · Dúvidas</div>
+        <details open><summary>Nunca usei Ableton. Consigo acompanhar?</summary><div class="ans">Sim. O curso começa do absoluto zero. Cada conceito é explicado antes de ser aplicado.</div></details>
+        <details><summary>Preciso ter um Mac?</summary><div class="ans">Não. Funciona em Windows ou Mac, desde que seu computador atenda aos requisitos básicos do Ableton Live.</div></details>
+        <details><summary>Serve só pra igreja?</summary><div class="ans">O foco é 100% voltado pra quem toca ao vivo em igreja, mas o conhecimento se aplica a qualquer performance ao vivo.</div></details>
+        <details><summary>Vou receber um template pronto?</summary><div class="ans"><span class="yes">Sim!</span><br>Você recebe o <strong>Template Base Worship de presente</strong>, pronto pra você baixar e customizar do seu jeito pra usar na sua igreja. E mais do que isso: ao longo do curso você vai aprender a criar qualquer outro template que precisar, pra qualquer configuração, do zero.</div></details>
+        <details><summary>O acesso é vitalício?</summary><div class="ans">Sim. Assista quando e quantas vezes quiser, incluindo todas as atualizações futuras.</div></details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ 12 · FINAL ═════════ -->
+<section class="sec final" data-scene="Final" id="final">
+  <div class="final-bg" id="finalBg" aria-hidden="true"></div>
+  <div class="container">
+    <div class="scene-label"><b>Cena 12</b> Sua vez</div>
+    <h2 class="split">Pare de depender<br>do template<br><span class="hl">dos outros.</span></h2>
+    <div class="final-row reveal d1">
+      <a href="https://pay.kiwify.com.br/y1KK52S" class="btn magnetic" data-info="Quero descobrir o Ableton|Última cena. Aperta o play.">Quero descobrir o Ableton <span class="tri"></span></a>
+      <p class="final-note">Garantia de 7 dias • Acesso vitalício</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <span class="ok"><i></i>Ableton Express © 2026 · Todos os direitos reservados</span>
+  <span>Feito por Tiago Silva · 48 kHz · 0 travamentos</span>
+</footer>
+
+<!-- COMPUTER MIDI KEYBOARD -->
+<div class="keys-pop" id="keysPop" aria-hidden="true">
+  <div class="keys-top"><span><b>Teclado MIDI do computador</b> · oitava <span id="octVal">C3</span> · <span class="mono">Z/X</span> muda oitava</span><button id="keysClose">fechar · M</button></div>
+  <div class="piano" id="piano"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var HOVER = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+var $ = function(s,c){return (c||document).querySelector(s);};
+var $$ = function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s));};
+
+/* ─────────────── toast ─────────────── */
+var toastEl=$('#toast'),toastT;
+function toast(msg){toastEl.textContent=msg;toastEl.classList.add('show');clearTimeout(toastT);toastT=setTimeout(function(){toastEl.classList.remove('show');},1800);}
+
+/* ─────────────── split headings ─────────────── */
+$$('.split').forEach(function(el){
+  var parts=el.innerHTML.split(/<br\s*\/?>/i);
+  el.innerHTML=parts.map(function(p){return '<span class="line"><span>'+p+'</span></span>';}).join('');
+  $$('.line>span',el).forEach(function(s,i){s.style.transitionDelay=(i*0.11)+'s';});
+});
+
+/* ─────────────── reveal observer ─────────────── */
+var io=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+},{threshold:.14,rootMargin:'0px 0px -60px 0px'});
+$$('.reveal,.split,.chat,.loop').forEach(function(el){io.observe(el);});
+setTimeout(function(){$$('.hero .reveal,.hero .split').forEach(function(el){el.classList.add('in');});},60);
+
+/* ─────────────── ticker ─────────────── */
+var words=['Timbres','Playback','Click','Instrument Racks','Macros','Split & Dual Zones','Drone','MIDI Map','Templates','Ao vivo na igreja'];
+var tk=$('#ticker'),html='';
+for(var r=0;r<2;r++)words.forEach(function(w){html+='<span>'+w+'</span>';});
+tk.innerHTML=html;
+
+/* ═════════════════════════════════════════════
+   AUDIO ENGINE (Web Audio, tudo sintetizado)
+   ═════════════════════════════════════════════ */
+var ctx=null,master,comp,masterAn,revIn,dlyIn,noiseBuf,rackOut;
+var tempo=72;
+function mtof(m){return 440*Math.pow(2,(m-69)/12);}
+function sixteenth(){return 60/tempo/4;}
+function initAudio(){
+  if(ctx){if(ctx.state==='suspended')ctx.resume();return ctx;}
+  var AC=window.AudioContext||window.webkitAudioContext; if(!AC)return null;
+  ctx=new AC();
+  comp=ctx.createDynamicsCompressor();comp.threshold.value=-16;comp.ratio.value=3.5;comp.attack.value=.01;comp.release.value=.2;
+  master=ctx.createGain();master.gain.value=.8;
+  master.connect(comp);comp.connect(ctx.destination);
+  masterAn=ctx.createAnalyser();masterAn.fftSize=512;comp.connect(masterAn);
+  // reverb
+  var rev=ctx.createConvolver(),len=ctx.sampleRate*3.4,b=ctx.createBuffer(2,len,ctx.sampleRate);
+  for(var ch=0;ch<2;ch++){var d=b.getChannelData(ch);for(var i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.6);}
+  rev.buffer=b;revIn=ctx.createGain();revIn.gain.value=.5;revIn.connect(rev);rev.connect(master);
+  // delay
+  dlyIn=ctx.createGain();var dl=ctx.createDelay(2),fb=ctx.createGain(),dlf=ctx.createBiquadFilter();
+  dl.delayTime.value=sixteenth()*3;fb.gain.value=.38;dlf.type='lowpass';dlf.frequency.value=3200;
+  dlyIn.connect(dl);dl.connect(dlf);dlf.connect(fb);fb.connect(dl);dlf.connect(master);dlf.connect(revIn);
+  dlyIn._dl=dl;
+  // noise
+  noiseBuf=ctx.createBuffer(1,ctx.sampleRate,ctx.sampleRate);var nd=noiseBuf.getChannelData(0);for(var j=0;j<nd.length;j++)nd[j]=Math.random()*2-1;
+  rackOut=ctx.createGain();rackOut.gain.value=.9;rackOut.connect(master);var rs=ctx.createGain();rs.gain.value=.12;rackOut.connect(rs);rs.connect(revIn);
+  buildTrackNodes();
+  return ctx;
+}
+function env(g,t,a,peak,dec,sus,rel,dur){
+  g.gain.setValueAtTime(0.0001,t);
+  g.gain.linearRampToValueAtTime(peak,t+a);
+  g.gain.exponentialRampToValueAtTime(Math.max(sus,0.0001),t+a+dec);
+  if(dur!==undefined){g.gain.setValueAtTime(Math.max(sus,0.0001),t+dur);g.gain.exponentialRampToValueAtTime(0.0001,t+dur+rel);}
+}
+function noise(t,dur,type,freq,q,gain,out,decay){
+  var s=ctx.createBufferSource();s.buffer=noiseBuf;
+  var f=ctx.createBiquadFilter();f.type=type;f.frequency.value=freq;f.Q.value=q||1;
+  var g=ctx.createGain();g.gain.setValueAtTime(gain,t);g.gain.exponentialRampToValueAtTime(0.0001,t+(decay||dur));
+  s.connect(f);f.connect(g);g.connect(out);s.start(t);s.stop(t+dur+.05);
+}
+/* instruments */
+var INST={
+  pad:function(notes,t,dur,out){
+    notes.forEach(function(n){
+      var f=mtof(n),g=ctx.createGain(),flt=ctx.createBiquadFilter();
+      flt.type='lowpass';flt.Q.value=.6;flt.frequency.setValueAtTime(600,t);flt.frequency.linearRampToValueAtTime(1500,t+dur*.6);flt.frequency.linearRampToValueAtTime(900,t+dur+1.4);
+      g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(.045,t+.9);g.gain.setValueAtTime(.045,t+dur);g.gain.exponentialRampToValueAtTime(0.0001,t+dur+1.6);
+      [-9,9].forEach(function(dt){var o=ctx.createOscillator();o.type='sawtooth';o.frequency.value=f;o.detune.value=dt;o.connect(flt);o.start(t);o.stop(t+dur+1.7);});
+      flt.connect(g);g.connect(out);
+    });
+  },
+  ep:function(n,t,vel,out,dur){
+    dur=dur||1.6;var f=mtof(n);
+    var car=ctx.createOscillator(),mod=ctx.createOscillator(),mg=ctx.createGain(),g=ctx.createGain();
+    car.frequency.value=f;mod.frequency.value=f;
+    mg.gain.setValueAtTime(f*2.4*vel,t);mg.gain.exponentialRampToValueAtTime(f*.12,t+.7);
+    mod.connect(mg);mg.connect(car.frequency);
+    var tine=ctx.createOscillator(),tg=ctx.createGain();tine.frequency.value=f*7;tg.gain.setValueAtTime(.02*vel,t);tg.gain.exponentialRampToValueAtTime(0.0001,t+.08);
+    tine.connect(tg);tg.connect(out);
+    g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(.14*vel,t+.004);g.gain.exponentialRampToValueAtTime(0.0005,t+dur);
+    car.connect(g);g.connect(out);
+    [car,mod,tine].forEach(function(o){o.start(t);o.stop(t+dur+.05);});
+  },
+  epHold:function(n,out){
+    var t=ctx.currentTime,f=mtof(n);
+    var car=ctx.createOscillator(),mod=ctx.createOscillator(),mg=ctx.createGain(),g=ctx.createGain();
+    car.frequency.value=f;mod.frequency.value=f;
+    mg.gain.setValueAtTime(f*2.2,t);mg.gain.exponentialRampToValueAtTime(f*.15,t+.8);
+    mod.connect(mg);mg.connect(car.frequency);
+    g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(.16,t+.004);g.gain.exponentialRampToValueAtTime(.05,t+1.2);g.gain.exponentialRampToValueAtTime(.012,t+6);
+    car.connect(g);g.connect(out);car.start(t);mod.start(t);
+    return function(){var t2=ctx.currentTime;g.gain.cancelScheduledValues(t2);g.gain.setValueAtTime(Math.max(g.gain.value,.0001),t2);g.gain.exponentialRampToValueAtTime(0.0001,t2+.35);car.stop(t2+.4);mod.stop(t2+.4);};
+  },
+  bass:function(n,t,dur,out){
+    var f=mtof(n),g=ctx.createGain(),flt=ctx.createBiquadFilter();flt.type='lowpass';flt.frequency.value=520;
+    var o1=ctx.createOscillator(),o2=ctx.createOscillator();o1.type='sine';o2.type='triangle';o1.frequency.value=f;o2.frequency.value=f;
+    var g2=ctx.createGain();g2.gain.value=.5;o2.connect(g2);g2.connect(flt);o1.connect(flt);flt.connect(g);g.connect(out);
+    env(g,t,.012,.5,.25,.32,.18,dur);o1.start(t);o2.start(t);o1.stop(t+dur+.3);o2.stop(t+dur+.3);
+  },
+  bell:function(n,t,vel,out){
+    var f=mtof(n),car=ctx.createOscillator(),mod=ctx.createOscillator(),mg=ctx.createGain(),g=ctx.createGain();
+    car.frequency.value=f;mod.frequency.value=f*3.5;mg.gain.setValueAtTime(f*1.8,t);mg.gain.exponentialRampToValueAtTime(f*.05,t+1.2);
+    mod.connect(mg);mg.connect(car.frequency);
+    g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(.08*vel,t+.003);g.gain.exponentialRampToValueAtTime(0.0001,t+2.4);
+    car.connect(g);g.connect(out);car.start(t);mod.start(t);car.stop(t+2.5);mod.stop(t+2.5);
+  },
+  kick:function(t,out,v){v=v||1;var o=ctx.createOscillator(),g=ctx.createGain();o.frequency.setValueAtTime(130,t);o.frequency.exponentialRampToValueAtTime(42,t+.13);g.gain.setValueAtTime(.95*v,t);g.gain.exponentialRampToValueAtTime(0.0001,t+.45);o.connect(g);g.connect(out);o.start(t);o.stop(t+.5);},
+  snare:function(t,out,v){v=v||1;noise(t,.22,'bandpass',1900,.8,.45*v,out,.2);var o=ctx.createOscillator(),g=ctx.createGain();o.type='triangle';o.frequency.setValueAtTime(200,t);o.frequency.exponentialRampToValueAtTime(150,t+.08);g.gain.setValueAtTime(.35*v,t);g.gain.exponentialRampToValueAtTime(0.0001,t+.12);o.connect(g);g.connect(out);o.start(t);o.stop(t+.15);},
+  clap:function(t,out,v){v=v||1;[0,.011,.022].forEach(function(d){noise(t+d,.03,'bandpass',1300,1.2,.35*v,out,.03);});noise(t+.03,.25,'bandpass',1200,1,.25*v,out,.22);},
+  hat:function(t,out,v){noise(t,.06,'highpass',7500,.7,.22*(v||1),out,.05);},
+  ohat:function(t,out,v){noise(t,.4,'highpass',7000,.7,.18*(v||1),out,.38);},
+  shaker:function(t,out,v){noise(t,.08,'bandpass',6500,1.2,.11*(v||1),out,.07);},
+  rim:function(t,out){var o=ctx.createOscillator(),g=ctx.createGain();o.type='triangle';o.frequency.value=820;g.gain.setValueAtTime(.4,t);g.gain.exponentialRampToValueAtTime(0.0001,t+.04);o.connect(g);g.connect(out);o.start(t);o.stop(t+.06);noise(t,.02,'bandpass',3000,2,.2,out,.02);},
+  tom:function(t,out,f){var o=ctx.createOscillator(),g=ctx.createGain();o.frequency.setValueAtTime(f,t);o.frequency.exponentialRampToValueAtTime(f*.62,t+.3);g.gain.setValueAtTime(.7,t);g.gain.exponentialRampToValueAtTime(0.0001,t+.42);o.connect(g);g.connect(out);o.start(t);o.stop(t+.45);},
+  cow:function(t,out){var bp=ctx.createBiquadFilter(),g=ctx.createGain();bp.type='bandpass';bp.frequency.value=2600;bp.Q.value=1;[540,800].forEach(function(f){var o=ctx.createOscillator();o.type='square';o.frequency.value=f;o.connect(bp);o.start(t);o.stop(t+.3);});g.gain.setValueAtTime(.35,t);g.gain.exponentialRampToValueAtTime(0.0001,t+.28);bp.connect(g);g.connect(out);},
+  crash:function(t,out){noise(t,1.6,'highpass',4800,.5,.22,out,1.5);},
+  click:function(t,accent){var o=ctx.createOscillator(),g=ctx.createGain();o.frequency.value=accent?1760:1180;g.gain.setValueAtTime(accent?.32:.2,t);g.gain.exponentialRampToValueAtTime(0.0001,t+.04);o.connect(g);g.connect(master);o.start(t);o.stop(t+.05);}
+};
+
+/* ─────────── Session: tracks, clips, harmonia ─────────── */
+var CH={G:[55,62,67,71],D:[54,62,66,69],Em:[52,59,64,67],C:[52,60,64,67]};
+var ROOT={G:43,D:42,Em:40,C:48};
+var PROG=[['G','D','Em','C'],['Em','C','G','D'],['C','G','D','Em'],['C','D','Em','D']];
+var SCENES=['Intro','Verso','Refrão','Ponte'];
+var TRACKS=[
+  {id:'pad',name:'Pad',color:'var(--c-purple)',vol:.9,rev:.55,dly:0,clips:['Intro','Verso','Refrão','Ponte']},
+  {id:'keys',name:'Keys',color:'var(--c-orange)',vol:.85,rev:.3,dly:.12,clips:['Intro','Arpejo','Refrão','Ponte']},
+  {id:'bass',name:'Bass',color:'var(--c-blue)',vol:.9,rev:0,dly:0,clips:[null,'Verso','Refrão','Pulso']},
+  {id:'perc',name:'Perc',color:'var(--c-yellow)',vol:.75,rev:.08,dly:0,clips:[null,'Shaker','Groove','Build']},
+  {id:'drone',name:'Drone',color:'var(--c-cyan)',vol:.85,rev:.6,dly:0,clips:['Sol',null,'Shimmer',null]},
+  {id:'bells',name:'Bells',color:'var(--c-pink)',vol:.8,rev:.4,dly:.45,clips:[null,'Leve','Bells','8va']}
+];
+TRACKS.forEach(function(tr){tr.playing=null;tr.pending=undefined;tr.startStep=0;tr.level=0;});
+function buildTrackNodes(){
+  TRACKS.forEach(function(tr){
+    tr.out=ctx.createGain();tr.out.gain.value=tr.vol;
+    tr.an=ctx.createAnalyser();tr.an.fftSize=256;tr.buf=new Float32Array(tr.an.fftSize);
+    tr.out.connect(tr.an);tr.out.connect(master);
+    if(tr.rev){var s=ctx.createGain();s.gain.value=tr.rev;tr.out.connect(s);s.connect(revIn);}
+    if(tr.dly){var d=ctx.createGain();d.gain.value=tr.dly;tr.out.connect(d);d.connect(dlyIn);}
+  });
+}
+var ARP=[0,1,2,3,2,1,2,3];
+function playStep(tr,row,ph,t){
+  var bar=Math.floor(ph/16)%4,s=ph%16,chord=CH[PROG[row][bar]],root=ROOT[PROG[row][bar]],B=sixteenth()*16,o=tr.out;
+  switch(tr.id){
+    case 'pad': if(s===0)INST.pad(chord,t,B,o);break;
+    case 'keys':
+      if(row===0){if(s%4===0)INST.ep(chord[(s/4)%4]+12,t,.75,o,2.2);}
+      else if(row===1){if(s%2===0)INST.ep(chord[ARP[s/2]]+12,t,s%4===0?.8:.55,o,1.4);}
+      else if(row===2){if(s===0||s===8){chord.forEach(function(n,i){if(i)INST.ep(n+12,t+i*.008,.6,o,2);});}if(s%2===0&&s!==0&&s!==8)INST.ep(chord[3]+12+(s%4?0:-5),t,.42,o,.9);}
+      else {if(s%2===0)INST.ep(chord[ARP[(s/2+bar)%8]]+12,t,.62,o,1.2);if(s===0)INST.ep(chord[0],t,.7,o,2.4);}
+      break;
+    case 'bass':
+      if(row===1){if(s===0)INST.bass(root,t,B*.48,o);if(s===8)INST.bass(root,t,B*.4,o);}
+      else if(row===2){if(s===0)INST.bass(root,t,B*.3,o);if(s===6)INST.bass(root,t,B*.12,o);if(s===8)INST.bass(root,t,B*.3,o);if(s===14)INST.bass(root+7>50?root-5:root+7,t,B*.1,o);}
+      else if(row===3){if(s%2===0)INST.bass(root,t,B*.1,o);}
+      break;
+    case 'perc':
+      if(row===1){INST.shaker(t,o,s%4===2?1:.55);}
+      else if(row===2){if(s===0||s===10)INST.kick(t,o);if(s===4||s===12)INST.clap(t,o,.8);if(s%2===0)INST.hat(t,o,s%4===2?.9:.5);if(s===14)INST.ohat(t,o,.6);}
+      else if(row===3){if(s%4===0)INST.kick(t,o,.9);if(bar===3&&s>=8)INST.snare(t,o,.3+(s-8)*.09);else if(s===4||s===12)INST.snare(t,o,.55);INST.hat(t,o,s%2?.35:.7);}
+      break;
+    case 'bells':
+      var pat=row===1?[0,6,10]:row===2?[0,3,6,10,12]:[0,2,4,6,8,10,12,14];
+      if(pat.indexOf(s)>-1){var k=pat.indexOf(s);INST.bell(chord[(k+bar)%4]+(row===3?36:24),t,row===3?.55:.8,o);}
+      break;
+  }
+}
+/* Drone (sustentado) */
+function droneStart(tr,row,t){
+  droneStop(tr,t);
+  var g=ctx.createGain();g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(1,t+2.2);g.connect(tr.out);
+  var flt=ctx.createBiquadFilter();flt.type='lowpass';flt.frequency.value=650;flt.Q.value=1.2;flt.connect(g);
+  var lfo=ctx.createOscillator(),lg=ctx.createGain();lfo.frequency.value=.09;lg.gain.value=320;lfo.connect(lg);lg.connect(flt.frequency);lfo.start(t);
+  var oscs=[lfo];
+  [43,50,55,62].forEach(function(n,i){[-6,6].forEach(function(dt){var o=ctx.createOscillator(),og=ctx.createGain();o.type='sawtooth';o.frequency.value=mtof(n);o.detune.value=dt;og.gain.value=i<2?.05:.03;o.connect(og);og.connect(flt);o.start(t);oscs.push(o);});});
+  if(row===2){[74,79,86].forEach(function(n){var o=ctx.createOscillator(),og=ctx.createGain(),tr2=ctx.createOscillator(),tg=ctx.createGain();o.type='sine';o.frequency.value=mtof(n);og.gain.value=.018;tr2.frequency.value=4.2;tg.gain.value=.01;tr2.connect(tg);tg.connect(og.gain);o.connect(og);og.connect(g);o.start(t);tr2.start(t);oscs.push(o,tr2);});}
+  tr.drone={g:g,oscs:oscs};
+}
+function droneStop(tr,t){
+  if(!tr.drone)return;var d=tr.drone;tr.drone=null;
+  d.g.gain.cancelScheduledValues(t);d.g.gain.setValueAtTime(d.g.gain.value||.5,t);d.g.gain.linearRampToValueAtTime(0.0001,t+1.8);
+  d.oscs.forEach(function(o){try{o.stop(t+1.9);}catch(e){}});
+}
+
+/* ─────────── Scheduler ─────────── */
+var playing=false,step=0,nextTime=0,timer=null,metroOn=false,hist=[];
+function scheduleStep(s,t){
+  if(s%16===0){
+    TRACKS.forEach(function(tr){
+      if(tr.pending===undefined)return;
+      var p=tr.pending;tr.pending=undefined;
+      if(p===null){if(tr.id==='drone')droneStop(tr,t);tr.playing=null;}
+      else{tr.playing=p;tr.startStep=s;if(tr.id==='drone')droneStart(tr,p,t);}
+    });
+    at(t,refreshClips);
+  }
+  if(metroOn&&s%4===0)INST.click(t,s%16===0);
+  TRACKS.forEach(function(tr){if(tr.playing!==null&&tr.id!=='drone')playStep(tr,tr.playing,(s-tr.startStep)%64,t);});
+  if(s%4===0)at(t,function(){beatPulse(s%16===0);});
+  hist.push([s,t]);if(hist.length>48)hist.shift();
+}
+function at(t,fn){setTimeout(fn,Math.max(0,(t-ctx.currentTime)*1000));}
+function tick(){while(nextTime<ctx.currentTime+.14){scheduleStep(step,nextTime);nextTime+=sixteenth();step++;}}
+function startTransport(){
+  if(playing)return;initAudio();playing=true;step=0;hist=[];nextTime=ctx.currentTime+.06;
+  timer=setInterval(tick,25);tick();$('#tPlay').classList.add('on');startLoop();
+}
+function stopTransport(){
+  if(!playing&&!anyPending()){return;}
+  playing=false;clearInterval(timer);
+  var t=ctx?ctx.currentTime:0;
+  TRACKS.forEach(function(tr){tr.playing=null;tr.pending=undefined;if(tr.id==='drone'&&ctx)droneStop(tr,t);});
+  $('#tPlay').classList.remove('on');refreshClips();
+  document.documentElement.classList.remove('beat','bar');
+}
+function anyPending(){return TRACKS.some(function(tr){return tr.pending!==undefined;});}
+function curStep(){
+  if(!ctx||!playing||!hist.length)return 0;
+  var now=ctx.currentTime,best=hist[0];
+  for(var i=0;i<hist.length;i++){if(hist[i][1]<=now)best=hist[i];}
+  return best[0]+Math.min(1,Math.max(0,(now-best[1])/sixteenth()));
+}
+function launch(ti,row){
+  initAudio();hideHint();
+  var tr=TRACKS[ti];
+  tr.pending=(tr.clips[row]?row:null);
+  if(!playing)startTransport();
+  refreshClips();
+}
+function launchScene(row){
+  initAudio();hideHint();
+  TRACKS.forEach(function(tr){tr.pending=tr.clips[row]?row:null;});
+  if(!playing)startTransport();
+  refreshClips();
+}
+function stopTrack(ti){if(!playing)return;TRACKS[ti].pending=null;refreshClips();}
+function stopAllClips(){if(!playing)return;TRACKS.forEach(function(tr){if(tr.playing!==null)tr.pending=null;});refreshClips();}
+
+/* ─────────── Session UI ─────────── */
+var grid=$('#sGrid'),mixer=$('#sMixer'),gh='';
+TRACKS.forEach(function(tr){gh+='<div class="s-head" style="--tc:'+tr.color+'">'+tr.name+'</div>';});
+gh+='<div class="s-head master">Master</div>';
+for(var row=0;row<4;row++){
+  TRACKS.forEach(function(tr,ti){
+    var c=tr.clips[row];
+    gh+=c?'<div class="slot clip" role="button" tabindex="0" aria-label="Disparar clipe '+c+'" data-t="'+ti+'" data-r="'+row+'" style="--tc:'+tr.color+'"><span class="ico"></span><span class="nm">'+c+'</span><span class="prog"></span></div>'
+         :'<div class="slot empty" role="button" tabindex="-1" aria-label="Slot vazio (para a faixa)" data-t="'+ti+'" data-r="'+row+'" data-empty="1"></div>';
+  });
+  gh+='<div class="scene-btn" role="button" tabindex="0" aria-label="Disparar cena '+SCENES[row]+'" data-scene="'+row+'"><span>'+SCENES[row]+'</span></div>';
+}
+TRACKS.forEach(function(tr,ti){gh+='<div class="tstop" role="button" tabindex="0" aria-label="Parar '+tr.name+'" data-stop="'+ti+'"></div>';});
+gh+='<div class="tstop master" role="button" tabindex="0" aria-label="Parar todos os clipes" data-stopall="1">STOP</div>';
+grid.innerHTML=gh;
+var mh='';TRACKS.forEach(function(){mh+='<div class="meter"><i></i><i></i></div>';});mh+='<div class="meter"><i></i><i></i></div>';
+mixer.innerHTML=mh;
+var meters=$$('.meter',mixer);
+function onGrid(e){
+  var el=e.target.closest('[data-t],[data-scene],[data-stop],[data-stopall]');if(!el)return;
+  if(el.dataset.scene!==undefined)launchScene(+el.dataset.scene);
+  else if(el.dataset.stopall)stopAllClips();
+  else if(el.dataset.stop!==undefined)stopTrack(+el.dataset.stop);
+  else if(el.dataset.empty){if(playing)stopTrack(+el.dataset.t);}
+  else launch(+el.dataset.t,+el.dataset.r);
+}
+grid.addEventListener('click',onGrid);
+grid.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();onGrid(e);}});
+var clipEls=$$('.clip',grid),sceneEls=$$('.scene-btn',grid);
+function refreshClips(){
+  clipEls.forEach(function(el){
+    var tr=TRACKS[+el.dataset.t],r=+el.dataset.r;
+    el.classList.toggle('playing',tr.playing===r);
+    el.classList.toggle('queued',(tr.pending===r&&tr.playing!==r)||(tr.playing===r&&tr.pending===null));
+  });
+  sceneEls.forEach(function(el){var r=+el.dataset.scene;el.classList.toggle('playing',TRACKS.every(function(tr){return tr.clips[r]?tr.playing===r:tr.playing===null;})&&playing);});
+}
+var hintEl=$('#sHint');
+function hideHint(){hintEl.classList.add('gone');}
+
+/* render loop: meters, progress, position, cpu */
+var looping=false,posEl=$('#tPos'),cpuBar=$('#cpuBar'),cpuVal=$('#cpuVal'),cpuT=0;
+function rms(an,buf){an.getFloatTimeDomainData(buf);var s=0;for(var i=0;i<buf.length;i+=2)s+=buf[i]*buf[i];return Math.sqrt(s/(buf.length/2));}
+var mBuf=new Float32Array(512);
+function startLoop(){if(looping)return;looping=true;requestAnimationFrame(loop);}
+function loop(ts){
+  var cs=curStep();
+  TRACKS.forEach(function(tr,i){
+    var lv=0;if(tr.an){lv=Math.min(1,rms(tr.an,tr.buf)*5.5);}
+    tr.level=Math.max(lv,tr.level*.86);
+    var m=meters[i].children;m[0].style.setProperty('--lv',(tr.level*100)+'%');m[1].style.setProperty('--lv',(tr.level*94)+'%');
+  });
+  if(masterAn){var ml=Math.min(1,rms(masterAn,mBuf)*4.2);var mm=meters[6].children;mm[0].style.setProperty('--lv',(ml*100)+'%');mm[1].style.setProperty('--lv',(ml*96)+'%');}
+  clipEls.forEach(function(el){
+    var tr=TRACKS[+el.dataset.t],r=+el.dataset.r,p=el.lastChild;
+    if(playing&&tr.playing===r){var ph=((cs-tr.startStep)%64+64)%64;p.style.width=(ph/64*100)+'%';}else if(p.style.width!=='0px')p.style.width='0';
+  });
+  if(playing){var st=Math.floor(cs);posEl.textContent=(Math.floor(st/16)+1)+'. '+(Math.floor(st%16/4)+1)+'. '+(st%4+1);}
+  if(ts-cpuT>400){cpuT=ts;var active=TRACKS.filter(function(t){return t.playing!==null;}).length;var c=playing?(4+active*3+Math.random()*3):(2+Math.random());cpuBar.style.width=c+'%';cpuVal.textContent=Math.round(c)+'%';}
+  var quiet=!playing&&TRACKS.every(function(t){return t.level<.005;});
+  if(quiet&&!kbdOn){looping=false;meters.forEach(function(m){m.children[0].style.setProperty('--lv','0%');m.children[1].style.setProperty('--lv','0%');});return;}
+  requestAnimationFrame(loop);
+}
+var beatT;
+function beatPulse(isBar){
+  if(RM||!playing)return;var h=document.documentElement;h.classList.add('beat');if(isBar)h.classList.add('bar');
+  clearTimeout(beatT);beatT=setTimeout(function(){h.classList.remove('beat','bar');},isBar?220:110);
+}
+
+/* ─────────── Transport UI ─────────── */
+$('#tPlay').addEventListener('click',function(){
+  if(playing){stopTransport();return;}
+  initAudio();hideHint();
+  if(!TRACKS.some(function(t){return t.pending!==undefined;}))TRACKS.forEach(function(tr){tr.pending=tr.clips[0]?0:null;});
+  startTransport();refreshClips();
+});
+$('#tStop').addEventListener('click',function(){if(playing)stopTransport();else posEl.textContent='1. 1. 1';});
+$('#tMetro').addEventListener('click',function(){metroOn=!metroOn;this.classList.toggle('on',metroOn);this.setAttribute('aria-pressed',metroOn);initAudio();toast(metroOn?'Metrônomo ligado':'Metrônomo desligado');});
+/* BPM: arrastar = muda, clicar = tap tempo */
+var bpmEl=$('#tBpm'),bpmVal=$('#bpmVal'),dragY=null,dragStart=0,moved=false,taps=[];
+function setTempo(v){tempo=Math.max(50,Math.min(160,v));bpmVal.textContent=tempo.toFixed(2);bpmEl.setAttribute('aria-valuenow',Math.round(tempo));if(dlyIn&&dlyIn._dl)dlyIn._dl.delayTime.setTargetAtTime(sixteenth()*3,ctx.currentTime,.1);}
+bpmEl.addEventListener('pointerdown',function(e){dragY=e.clientY;dragStart=tempo;moved=false;bpmEl.setPointerCapture(e.pointerId);});
+bpmEl.addEventListener('pointermove',function(e){if(dragY===null)return;var dy=dragY-e.clientY;if(Math.abs(dy)>3)moved=true;if(moved)setTempo(Math.round((dragStart+dy*.35)*100)/100);});
+bpmEl.addEventListener('pointerup',function(){
+  dragY=null;if(moved)return;
+  var now=performance.now();taps=taps.filter(function(x){return now-x<2200;});taps.push(now);
+  bpmEl.classList.add('tap');setTimeout(function(){bpmEl.classList.remove('tap');},120);
+  if(taps.length>=2){var iv=(taps[taps.length-1]-taps[0])/(taps.length-1);setTempo(Math.round(60000/iv*100)/100);}
+  else toast('Tap Tempo: clique no ritmo');
+});
+bpmEl.addEventListener('keydown',function(e){if(e.key==='ArrowUp'){e.preventDefault();setTempo(tempo+1);}if(e.key==='ArrowDown'){e.preventDefault();setTempo(tempo-1);}});
+
+/* ─────────── Computer MIDI keyboard ─────────── */
+var kbdOn=false,oct=48,held={},keysPop=$('#keysPop'),piano=$('#piano'),kbdOut=null;
+var KMAP={a:0,w:1,s:2,e:3,d:4,f:5,t:6,g:7,y:8,h:9,u:10,j:11,k:12,o:13,l:14,p:15,';':16};
+var WHITE=[['a',0],['s',2],['d',4],['f',5],['g',7],['h',9],['j',11],['k',12],['l',14],[';',16]];
+var BLACK=[['w',1,1],['e',3,2],['t',6,4],['y',8,5],['u',10,6],['o',13,8],['p',15,9]];
+var ph='';WHITE.forEach(function(w){ph+='<div class="wk" data-k="'+w[0]+'">'+w[0].toUpperCase()+'</div>';});
+piano.innerHTML=ph;
+BLACK.forEach(function(b){var d=document.createElement('div');d.className='bk';d.dataset.k=b[0];d.textContent=b[0].toUpperCase();d.style.left='calc('+b[2]+' * var(--wk) - var(--bk)/2)';piano.appendChild(d);});
+function sizePiano(){var w=piano.querySelector('.wk').getBoundingClientRect().width,b=piano.querySelector('.bk').getBoundingClientRect().width;piano.style.setProperty('--wk',w+'px');piano.style.setProperty('--bk',b+'px');}
+function noteOn(k){
+  if(held[k]||KMAP[k]===undefined)return;initAudio();
+  if(!kbdOut){kbdOut=ctx.createGain();kbdOut.gain.value=.9;kbdOut.connect(master);var s=ctx.createGain();s.gain.value=.35;kbdOut.connect(s);s.connect(revIn);}
+  held[k]=INST.epHold(oct+KMAP[k],kbdOut);var el=piano.querySelector('[data-k="'+(k===';'?';':k)+'"]');if(el)el.classList.add('down');
+}
+function noteOff(k){if(!held[k])return;held[k]();delete held[k];var el=piano.querySelector('[data-k="'+k+'"]');if(el)el.classList.remove('down');}
+function setKbd(on){
+  kbdOn=on;$('#tKbd').classList.toggle('on',on);$('#tKbd').setAttribute('aria-pressed',on);
+  keysPop.classList.toggle('open',on);keysPop.setAttribute('aria-hidden',!on);
+  if(on){sizePiano();initAudio();toast('Teclado ligado: A S D F G H J K');}else Object.keys(held).forEach(noteOff);
+}
+$('#tKbd').addEventListener('click',function(){setKbd(!kbdOn);});
+$('#keysClose').addEventListener('click',function(){setKbd(false);});
+piano.addEventListener('pointerdown',function(e){var el=e.target.closest('[data-k]');if(!el)return;e.preventDefault();var k=el.dataset.k;noteOn(k);var up=function(){noteOff(k);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up);};window.addEventListener('pointerup',up);window.addEventListener('pointercancel',up);});
+function octLabel(){$('#octVal').textContent='C'+(oct/12-1);}
+
+/* ─────────── Keyboard shortcuts ─────────── */
+document.addEventListener('keydown',function(e){
+  if(e.metaKey||e.ctrlKey||e.altKey)return;
+  var tag=(e.target.tagName||'').toLowerCase();if(tag==='input'&&e.target.type!=='range')return;
+  var k=e.key.toLowerCase();
+  if(e.code==='Space'&&!e.target.closest('button,a,summary,input,[role=button],[role=slider]')){
+    e.preventDefault();if(e.repeat)return;
+    if(playing)stopTransport();else $('#tPlay').click();return;
+  }
+  if(k==='m'&&!e.repeat){setKbd(!kbdOn);return;}
+  if(!kbdOn)return;
+  if(k==='z'){oct=Math.max(24,oct-12);octLabel();return;}
+  if(k==='x'){oct=Math.min(84,oct+12);octLabel();return;}
+  if(KMAP[k]!==undefined){e.preventDefault();if(!e.repeat)noteOn(k);startLoop();}
+});
+document.addEventListener('keyup',function(e){noteOff(e.key.toLowerCase());});
+window.addEventListener('blur',function(){Object.keys(held).forEach(noteOff);});
+
+/* ─────────── Crossfader ─────────── */
+var xf=$('#xf'),xfA=$('#xfA'),xfB=$('#xfB'),xfTouched=false;
+function applyXf(){var v=xf.value/100;xfA.style.opacity=(1-.55*v).toFixed(2);xfA.style.filter='grayscale('+v+') blur('+(v*.6).toFixed(2)+'px)';xfB.style.opacity=(.45+.55*v).toFixed(2);xfB.style.filter='grayscale('+(1-v)+')';}
+xf.addEventListener('input',function(){xfTouched=true;applyXf();});
+applyXf();
+new IntersectionObserver(function(es,ob){es.forEach(function(e){if(!e.isIntersecting)return;ob.disconnect();
+  if(RM){xf.value=100;applyXf();return;}
+  setTimeout(function(){var st=null,from=+xf.value;function an(ts){if(xfTouched)return;if(!st)st=ts;var p=Math.min(1,(ts-st)/1800),ez=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;xf.value=from+(100-from)*ez;applyXf();if(p<1)requestAnimationFrame(an);}requestAnimationFrame(an);},700);
+});},{threshold:.5}).observe($('.xf-panel'));
+
+/* ─────────── Record arm ─────────── */
+var arms=$$('.arm-row'),armMsg=$('#armMsg'),armRes=$('#armResult'),armCount=$('#armCount');
+var ARM_MSG=['Nenhuma faixa armada ainda.','1 faixa armada. Já é motivo suficiente.','2 faixas armadas. Tá sentindo, né?','3 faixas armadas. Esse curso foi feito pra você.','Tudo armado. Aperta o REC: o Ableton Express é pra você.'];
+arms.forEach(function(b){b.addEventListener('click',function(){
+  var on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',on);
+  var n=arms.filter(function(x){return x.getAttribute('aria-pressed')==='true';}).length;
+  armMsg.textContent=ARM_MSG[n];armCount.textContent=n+' / 4';armRes.classList.toggle('on',n>0);
+  if(ctx&&on)INST.rim(ctx.currentTime,rackOut);
+});});
+
+/* ─────────── Arrangement: MIDI notes + playhead ─────────── */
+function seeded(n){var x=Math.sin(n)*10000;return x-Math.floor(x);}
+$$('.arr-notes').forEach(function(svg,idx){
+  var w=1000,h=200,out='';svg.setAttribute('viewBox','0 0 '+w+' '+h);svg.setAttribute('preserveAspectRatio','none');
+  for(var i=0;i<34;i++){var x=i*30+seeded(idx*99+i)*8,y=20+Math.floor(seeded(idx*7+i*3)*8)*20,len=14+seeded(i+idx)*40;out+='<rect x="'+x+'" y="'+y+'" width="'+len+'" height="12" rx="1" fill="var(--tc)"/>';}
+  svg.innerHTML=out;
+});
+var arrTracks=$$('.arr-track'),arrStrip=$$('#arrStrip i'),arrPlay=$('#arrPlay'),arrBox=$('#arrTracks');
+function updateArr(){
+  var mid=window.innerHeight*.5,active=-1,pos=0;
+  arrTracks.forEach(function(t,i){var b=t.getBoundingClientRect();if(b.top<=mid){pos=Math.min(i+1,i+(mid-b.top)/b.height);if(b.bottom>mid)active=i;}});
+  arrPlay.style.left=(pos/6.6*100)+'%';
+  arrTracks.forEach(function(t,i){t.classList.toggle('on',i===active);});
+  arrStrip.forEach(function(s,i){s.classList.toggle('on',i===active);});
+}
+
+/* ─────────── Knobs ─────────── */
+var ARC=150.8; // comprimento do arco 270° r=32
+$$('.knob').forEach(function(k){var a=k.querySelector('.val-arc');a.style.strokeDasharray=ARC;a.style.strokeDashoffset=ARC;k.querySelector('.ptr').style.transform='rotate(-135deg)';});
+new IntersectionObserver(function(es,ob){es.forEach(function(e){if(!e.isIntersecting)return;ob.disconnect();
+  $$('.knob').forEach(function(k,i){
+    var v=+k.dataset.v,mx=+k.dataset.max,pre=k.dataset.pre,fr=v/mx,num=k.querySelector('.num');
+    setTimeout(function(){
+      k.querySelector('.val-arc').style.strokeDashoffset=ARC*(1-fr);
+      k.querySelector('.ptr').style.transform='rotate('+(-135+270*fr)+'deg)';
+      var st=null;function an(ts){if(!st)st=ts;var p=Math.min(1,(ts-st)/1500),ez=1-Math.pow(1-p,3);num.textContent=pre+Math.round(v*ez);if(p<1)requestAnimationFrame(an);}
+      if(RM)num.textContent=pre+v;else requestAnimationFrame(an);
+    },i*140);
+  });
+});},{threshold:.35}).observe($('#rack'));
+
+/* ─────────── Trajetória (automação) ─────────── */
+var traj=$('#traj'),trajFill=$('#trajFill'),trajLis=$$('#traj li');
+function updateTraj(){
+  var r=traj.getBoundingClientRect(),mid=window.innerHeight*.62;
+  var h=Math.min(r.height-12,Math.max(0,mid-r.top));trajFill.style.height=h+'px';
+  trajLis.forEach(function(li){li.classList.toggle('lit',li.getBoundingClientRect().top+10<mid);});
+}
+
+/* ─────────── Drum Rack ─────────── */
+$$('.pad[data-snd]').forEach(function(p){
+  var fire=function(){
+    initAudio();if(!ctx)return;var t=ctx.currentTime+.005,s=p.dataset.snd,o=rackOut;
+    if(s==='tomL')INST.tom(t,o,110);else if(s==='tomH')INST.tom(t,o,180);
+    else if(s==='bell')INST.bell(79,t,1,o);else INST[s](t,o,1);
+    p.classList.add('hit');setTimeout(function(){p.classList.remove('hit');},140);startLoop();
+  };
+  p.addEventListener('pointerdown',function(e){if(e.pointerType==='mouse'){p._m=true;fire();}});
+  p.addEventListener('click',function(){if(p._m){p._m=false;return;}fire();});
+});
+
+/* ─────────── Lightbox ─────────── */
+var lb=$('#lightbox'),lbImg=$('#lbImg');
+$$('.proof').forEach(function(b){b.addEventListener('click',function(){lbImg.src=b.querySelector('img').src;if(lb.showModal)lb.showModal();});});
+$('#lbClose').addEventListener('click',function(){lb.close();});
+lb.addEventListener('click',function(e){if(e.target===lb)lb.close();});
+
+/* ─────────── Final grid bg ─────────── */
+var fb=$('#finalBg'),cols=['--c-purple','--c-orange','--c-blue','--c-yellow','--c-cyan','--c-pink'],fh='';
+for(var i=0;i<72;i++){fh+=seeded(i*3.3)>.42?'<i style="--tc:var('+cols[i%12%6]+');--dl:'+(seeded(i)*4).toFixed(2)+'s"></i>':'<span></span>';}
+fb.innerHTML=fh;fb.style.gridTemplateRows='repeat(6,1fr)';
+
+/* ─────────── Scenes rail + scroll ─────────── */
+var scenes=$$('section[data-scene]'),rail=$('#sceneRail'),rh='';
+scenes.forEach(function(s,i){rh+='<a href="#'+s.id+'" aria-label="Cena '+(i+1)+': '+s.dataset.scene+'">'+(i+1)+'<span>'+s.dataset.scene+'</span></a>';});
+rail.innerHTML=rh;var railLinks=$$('a',rail);
+var sceneObs=new IntersectionObserver(function(es){es.forEach(function(e){e.target.classList.toggle('in-view',e.isIntersecting);});},{rootMargin:'-45% 0px -45% 0px'});
+scenes.forEach(function(s){sceneObs.observe(s);});
+var head=$('#scrollHead'),ticking=false;
+function onScroll(){
+  if(ticking)return;ticking=true;
+  requestAnimationFrame(function(){
+    ticking=false;
+    var max=document.documentElement.scrollHeight-window.innerHeight,p=max>0?window.scrollY/max:0;
+    head.style.width=(p*100)+'%';
+    if(!playing){var bars=p*96,b=Math.floor(bars),beat=Math.floor((bars-b)*4),sx=Math.floor(((bars-b)*4-beat)*4);posEl.textContent=(b+1)+'. '+(beat+1)+'. '+(sx+1);}
+    var mid=window.innerHeight*.4,cur=0;scenes.forEach(function(s,i){if(s.getBoundingClientRect().top<mid)cur=i;});
+    railLinks.forEach(function(a,i){a.classList.toggle('active',i===cur);});
+    updateArr();updateTraj();
+  });
+}
+window.addEventListener('scroll',onScroll,{passive:true});window.addEventListener('resize',onScroll);onScroll();
+
+/* ─────────── Info View ─────────── */
+var iv=$('#infoView'),ivT=$('#infoTitle'),ivX=$('#infoText'),ivClosed=false,ivHide;
+try{ivClosed=localStorage.getItem('ae-info-closed')==='1';}catch(e){}
+if(HOVER){
+  document.addEventListener('mouseover',function(e){
+    if(ivClosed||e.target.closest('#infoView'))return;
+    var el=e.target.closest('[data-info]');
+    clearTimeout(ivHide);
+    if(el){var p=el.dataset.info.split('|');ivT.textContent=p[0];ivX.textContent=p[1]||'';iv.classList.remove('hidden');}
+    else ivHide=setTimeout(function(){iv.classList.add('hidden');},450);
+  });
+}
+$('#infoClose').addEventListener('click',function(){ivClosed=true;iv.classList.add('hidden');try{localStorage.setItem('ae-info-closed','1');}catch(e){}toast('Info View desligada');});
+
+/* ─────────── Magnetic buttons ─────────── */
+if(HOVER&&!RM){
+  $$('.magnetic').forEach(function(b){
+    b.addEventListener('mousemove',function(e){var r=b.getBoundingClientRect(),x=e.clientX-r.left-r.width/2,y=e.clientY-r.top-r.height/2;b.style.transform='translate('+(x*.14)+'px,'+(y*.2)+'px)';b.style.boxShadow='0 14px 50px rgba(238,93,19,.5)';});
+    b.addEventListener('mouseleave',function(){b.style.transform='';b.style.boxShadow='';});
+  });
+}
+
+})();
+</script>
+</body>
+</html>
