@@ -19,8 +19,8 @@
   --line:#2e2d29;
   --line2:#3b3a35;
   --ink:#efeae0;
-  --muted:#a8a196;
-  --dim:#77716a;
+  --muted:#c9c2b6;
+  --dim:#a59f95;
   --orange:#EE5D13;
   --orange2:#ff7c3a;
   --orange-dim:rgba(238,93,19,.13);
@@ -35,7 +35,7 @@
   --cream2:#e8e1cc;
   --cream-line:#d6cdb9;
   --cream-ink:#171511;
-  --cream-muted:#625a4f;
+  --cream-muted:#4d463d;
   --mono:'Inter',sans-serif;
   --display:'Jost',sans-serif;
   --tbar:56px;
@@ -177,7 +177,7 @@ section{position:relative;}
 .scene-label b::before{content:'';border-left:6px solid currentColor;border-top:4px solid transparent;border-bottom:4px solid transparent;}
 .in-view .scene-label b{background:var(--play);}
 .scene-label::after{content:'';flex:1;height:1px;background:var(--line);}
-.light .scene-label{color:#8d8373;}
+.light .scene-label{color:#5c5448;}
 .light .scene-label::after{background:var(--cream-line);}
 .light .scene-label b{background:#b9ae99;}
 .light.in-view .scene-label b{background:var(--cream-ink);color:var(--cream);}
@@ -221,9 +221,6 @@ section{position:relative;}
 @media(max-width:600px){.hero h1{font-size:clamp(44px,13vw,64px);margin-bottom:24px;}}
 .hero-sub{max-width:470px;font-size:17px;color:var(--muted);line-height:1.7;margin-bottom:34px;}
 .hero-sub strong{color:var(--ink);font-weight:600;}
-.hero-by{display:flex;align-items:center;gap:10px;margin-top:28px;font-size:13px;color:var(--muted);}
-.hero-by b{color:var(--ink);font-weight:600;}
-.hero-by .sig{font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;padding-left:10px;border-left:1px solid var(--line2);}
 @media(max-width:600px){.hero{padding:44px 0 64px;}.hero-cta .btn{width:100%;}.hero-sub{font-size:15.5px;}}
 
 /* SESSION VIEW TOY */
@@ -344,7 +341,7 @@ section{position:relative;}
 .xf-col.a li{color:var(--muted);}
 .xf-col.b li{color:var(--ink);font-weight:500;}
 .xf-list li::before{flex:0 0 auto;font-family:var(--mono);font-size:12px;margin-top:2px;}
-.xf-col.a li::before{content:'✕';color:#7b756c;}
+.xf-col.a li::before{content:'✕';color:#a59f95;}
 .xf-col.b li::before{content:'✓';color:var(--orange);}
 
 /* ───────── FOR WHO / ARM ───────── */
@@ -353,7 +350,7 @@ section{position:relative;}
 .for-story p{font-size:18px;font-weight:500;line-height:1.75;color:var(--cream-ink);}
 .for-story strong{font-style:italic;}
 .arm-panel{border:1px solid var(--cream-line);border-radius:12px;background:#f6f1e3;overflow:hidden;}
-.arm-head{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-bottom:1px solid var(--cream-line);font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8d8373;}
+.arm-head{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-bottom:1px solid var(--cream-line);font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#5c5448;}
 .arm-list{list-style:none;}
 .arm-list li{border-bottom:1px solid var(--cream-line);}
 .arm-list li:last-child{border-bottom:0;}
@@ -377,7 +374,7 @@ section{position:relative;}
 }
 .arm-result .rec{width:10px;height:10px;border-radius:50%;background:#555;flex:0 0 auto;transition:background .3s;}
 .arm-result.on .rec{background:var(--orange);box-shadow:0 0 12px var(--orange);animation:blink 1.2s infinite;}
-.for-not{margin-top:22px;font-family:var(--mono);font-size:12px;color:#8d8373;letter-spacing:.02em;}
+.for-not{margin-top:22px;font-family:var(--mono);font-size:12px;color:#5c5448;letter-spacing:.02em;}
 
 /* ───────── MODULES / ARRANGEMENT ───────── */
 .shot{border:1px solid var(--line2);border-radius:12px;overflow:hidden;background:var(--panel);margin-bottom:72px;box-shadow:0 30px 80px rgba(0,0,0,.45);}
@@ -513,7 +510,7 @@ section{position:relative;}
 .knob .lbl{font-family:var(--mono);font-size:9.5px;color:var(--muted);letter-spacing:.02em;margin-top:5px;line-height:1.35;}
 
 /* ───────── WHAT YOU GET / DRUM RACK ───────── */
-.rack-hint{display:flex;align-items:center;gap:10px;margin:-16px 0 36px;font-family:var(--mono);font-size:11.5px;color:#7d7363;}
+.rack-hint{display:flex;align-items:center;gap:10px;margin:-16px 0 36px;font-family:var(--mono);font-size:11.5px;color:#5c5448;}
 .rack-hint i{width:8px;height:8px;border-radius:50%;background:var(--orange);animation:blink 1.6s infinite;}
 .pads{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:14px;background:#211f1a;border-radius:14px;box-shadow:inset 0 2px 0 rgba(255,255,255,.04),0 30px 60px rgba(40,30,10,.25);}
 @media(max-width:860px){.pads{grid-template-columns:repeat(2,1fr);gap:8px;padding:10px;}}
@@ -529,9 +526,9 @@ section{position:relative;}
 .pad.hit{transform:translateY(2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 1px 0 #15140f,0 0 40px color-mix(in srgb,var(--tc) 60%,transparent);background:color-mix(in srgb,var(--tc) 40%,#2b2924);}
 .pad::before{content:'';position:absolute;top:12px;right:12px;width:8px;height:8px;border-radius:50%;background:var(--tc);opacity:.6;transition:opacity .15s,box-shadow .15s;}
 .pad.hit::before{opacity:1;box-shadow:0 0 12px var(--tc);}
-.pad .note{position:absolute;top:10px;left:12px;font-family:var(--mono);font-size:9.5px;color:#8a8478;}
+.pad .note{position:absolute;top:10px;left:12px;font-family:var(--mono);font-size:9.5px;color:#aaa396;}
 .pad strong{display:block;font-family:var(--display);font-size:16.5px;font-weight:600;line-height:1.25;margin-bottom:4px;}
-.pad span.d{font-size:13px;line-height:1.45;color:#b9b2a5;}
+.pad span.d{font-size:13px;line-height:1.45;color:#d6d0c4;}
 @media(max-width:600px){.pad strong{font-size:14.5px;}.pad span.d{font-size:12px;}}
 .pad.go{background:var(--orange);color:#fff;justify-content:space-between;}
 .pad.go::before{display:none;}
@@ -539,7 +536,7 @@ section{position:relative;}
 .pad.go strong{font-size:20px;}
 .pad.go:hover{background:var(--orange2);}
 .pad.go .big-tri{width:0;height:0;border-left:30px solid #fff;border-top:19px solid transparent;border-bottom:19px solid transparent;margin-top:22px;}
-.get-note{margin-top:18px;font-family:var(--mono);font-size:11.5px;color:#7d7363;}
+.get-note{margin-top:18px;font-family:var(--mono);font-size:11.5px;color:#5c5448;}
 
 /* ───────── COMMUNITY ───────── */
 .comm-wrap{display:grid;grid-template-columns:1fr 420px;gap:72px;align-items:center;}
@@ -628,7 +625,7 @@ section{position:relative;}
 .faq-wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:64px;align-items:start;}
 @media(max-width:860px){.faq-wrap{grid-template-columns:1fr;gap:20px;}}
 .browser{border:1px solid var(--cream-line);border-radius:12px;background:#f6f1e3;overflow:hidden;}
-.browser-bar{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--cream-line);font-family:var(--mono);font-size:10px;color:#8d8373;letter-spacing:.08em;text-transform:uppercase;}
+.browser-bar{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--cream-line);font-family:var(--mono);font-size:10px;color:#5c5448;letter-spacing:.08em;text-transform:uppercase;}
 .browser details{border-bottom:1px solid var(--cream-line);}
 .browser details:last-child{border-bottom:0;}
 .browser summary{
@@ -638,7 +635,7 @@ section{position:relative;}
 .browser summary::-webkit-details-marker{display:none;}
 .browser summary:hover{background:#efe8d6;}
 .browser summary::before{
-  content:'';flex:0 0 auto;width:0;height:0;border-left:8px solid #8d8373;border-top:5px solid transparent;border-bottom:5px solid transparent;
+  content:'';flex:0 0 auto;width:0;height:0;border-left:8px solid #5c5448;border-top:5px solid transparent;border-bottom:5px solid transparent;
   transition:transform .2s;
 }
 .browser details[open] summary::before{transform:rotate(90deg);border-left-color:var(--orange);}
@@ -676,9 +673,9 @@ footer .ok i{width:7px;height:7px;border-radius:50%;background:var(--play);}
 .keys-top b{color:var(--ink);}
 .keys-top button{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;background:var(--panel3);color:var(--muted);}
 .piano{position:relative;display:flex;height:96px;touch-action:none;}
-.wk{width:40px;height:96px;background:linear-gradient(#f4efe4,#ddd6c7);border:1px solid #0e0e0d;border-radius:0 0 5px 5px;position:relative;display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;font-family:var(--mono);font-size:9px;color:#8a8478;}
+.wk{width:40px;height:96px;background:linear-gradient(#f4efe4,#ddd6c7);border:1px solid #0e0e0d;border-radius:0 0 5px 5px;position:relative;display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;font-family:var(--mono);font-size:9px;color:#5c5448;}
 .wk.down{background:linear-gradient(#f9b48c,var(--orange));color:#fff;}
-.bk{position:absolute;top:0;width:26px;height:58px;background:linear-gradient(#2c2c28,#0d0d0c);border-radius:0 0 4px 4px;z-index:2;display:flex;align-items:flex-end;justify-content:center;padding-bottom:5px;font-family:var(--mono);font-size:8px;color:#7a756c;}
+.bk{position:absolute;top:0;width:26px;height:58px;background:linear-gradient(#2c2c28,#0d0d0c);border-radius:0 0 4px 4px;z-index:2;display:flex;align-items:flex-end;justify-content:center;padding-bottom:5px;font-family:var(--mono);font-size:8px;color:#a59f95;}
 .bk.down{background:linear-gradient(#ff8a4c,#b8440a);color:#fff;}
 @media(max-width:560px){.wk{width:calc((100vw - 52px)/10);}.bk{width:calc((100vw - 52px)/16);}}
 
@@ -738,7 +735,6 @@ footer .ok i{width:7px;height:7px;border-radius:50%;background:var(--play);}
       <div class="hero-cta reveal d3">
         <a href="https://pay.kiwify.com.br/y1KK52S" class="btn magnetic" data-info="Começar agora|Acesso imediato depois da compra. Garantia de 7 dias.">Começar agora <span class="tri"></span></a>
       </div>
-      <div class="hero-by reveal d4">com <b>Tiago Silva</b><span class="sig">10 anos de Ableton no palco</span></div>
     </div>
 
     <div class="session reveal d2" id="session" data-info="Session View|Isso aqui toca de verdade. Clique num clipe pra disparar, ou numa cena (coluna da direita) pra disparar a linha inteira. Entra sempre no próximo compasso, igual no Live.">
@@ -924,10 +920,10 @@ footer .ok i{width:7px;height:7px;border-radius:50%;background:var(--play);}
           <span class="traj-fill" id="trajFill"></span>
           <li><span class="when">9 anos</span><p>Comecei a tocar teclado com 9 anos dentro da igreja.</p></li>
           <li><span class="when">16 anos · estrada</span><p>Desde os 16 viajo ministrando com banda. Ao longo do caminho, o lado musical e o lado técnico foram crescendo juntos, um complementando o outro.</p></li>
-          <li><span class="when">DROPS</span><p>Fiz parte do <strong>DROPS</strong>, onde atuei como tecladista e na produção musical e de áudio. A banda alcançou milhões de streams, especialmente com a canção <em>“É Ele”</em>, que eu arranjei, produzi, mixei e masterizei.</p></li>
+          <li><span class="when">DROPS</span><p>Tecladista e produtor musical e de áudio do <strong>DROPS</strong>. A banda alcançou milhões de streams, especialmente com a canção <em>“É Ele”</em>, que eu arranjei, produzi, mixei e masterizei.</p></li>
           <li><span class="when">5 anos · igreja local</span><p>Durante 5 anos contribuí para a construção da identidade sonora da minha igreja local, cuidando da produção de todos os projetos musicais e da mixagem das transmissões ao vivo. Essa experiência me deu uma sensibilidade que vai do palco à mesa de som.</p></li>
           <li><span class="when">Bethel Music</span><p>Estudei com profissionais da <strong>Bethel Music</strong> através da plataforma online, aprofundando técnica, performance e produção.</p></li>
-          <li><span class="when">2021 →</span><p>Desde 2021 tenho trabalhos publicados como produtor, mixer e master em projetos externos e de igreja.</p></li>
+          <li><span class="when">Carreira validada além da igreja local</span><p>Desde 2021 tenho trabalhos publicados como produtor, mixer e master em projetos externos e de igreja.</p></li>
           <li><span class="when">Lite Keys</span><p>Criador do <strong>Lite Keys</strong>, template para Ableton Live que já é utilizado por tecladistas no Brasil e no mundo desde seu lançamento.</p></li>
         </ol>
       </div>
