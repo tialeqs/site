@@ -152,8 +152,9 @@ def build(src: pathlib.Path, name: str):
     # 2) versão de preview (script legível; usada no artifact do Claude).
     #    O viewer do Claude bloqueia imagem de outro site, então as imagens do
     #    WordPress entram embutidas aqui, a partir de cópias leves em assets/preview/.
+    html = re.sub(r'\s(?:srcset|sizes)="[^"]*"', "", html)  # sem srcset: senão o viewer tenta o WP
     for f in (src.parent / "assets" / "preview").glob("*.webp"):
-        url = re.compile(r'https://tialeqs\.com\.br/wp-content/uploads/[^"]*/' + re.escape(f.stem) + r'\.(?:png|jpe?g)')
+        url = re.compile(r'https://tialeqs\.com\.br/wp-content/uploads/[^"]*/' + re.escape(f.stem) + r'(?:-\d+x\d+)?\.(?:png|jpe?g)')
         html = url.sub("data:image/webp;base64," + base64.b64encode(f.read_bytes()).decode(), html)
     prev = root / "dist" / "preview" / f"{name}.html"
     prev.parent.mkdir(exist_ok=True)
