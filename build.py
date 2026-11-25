@@ -149,7 +149,12 @@ def build(src: pathlib.Path, name: str):
     dest.parent.mkdir(exist_ok=True)
     dest.write_text(wp, encoding="ascii")
     print(f"{dest.relative_to(root)}  {len(wp)/1024:.0f} KB  (WordPress)")
-    # 2) versão de preview (script legível; usada no artifact do Claude)
+    # 2) versão de preview (script legível; usada no artifact do Claude).
+    #    O viewer do Claude bloqueia imagem de outro site, então as imagens do
+    #    WordPress entram embutidas aqui, a partir de cópias leves em assets/preview/.
+    for f in (src.parent / "assets" / "preview").glob("*.webp"):
+        url = re.compile(r'https://tialeqs\.com\.br/wp-content/uploads/[^"]*/' + re.escape(f.stem) + r'\.(?:png|jpe?g)')
+        html = url.sub("data:image/webp;base64," + base64.b64encode(f.read_bytes()).decode(), html)
     prev = root / "dist" / "preview" / f"{name}.html"
     prev.parent.mkdir(exist_ok=True)
     prev.write_text(html, encoding="ascii")
